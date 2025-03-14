@@ -5,7 +5,7 @@ import { Message } from '../../../domain/entities/message';
   selector: 'app-message-item',
   imports: [],
   templateUrl: './message-item.component.html',
-  styleUrl: './message-item.component.scss'
+  styleUrl: './message-item.component.scss',
 })
 export class MessageItemComponent {
   @Input() message!: Message;

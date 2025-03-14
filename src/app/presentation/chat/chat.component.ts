@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../application/services/message.service';
 import { Message } from '../../domain/entities/message';
-import { MessageListComponent } from "../components/message-list/message-list.component";
-import { MessageInputComponent } from "../components/message-input/message-input.component";
+import { MessageListComponent } from '../components/message-list/message-list.component';
+import { MessageInputComponent } from '../components/message-input/message-input.component';
 
 @Component({
   selector: 'app-chat',
   imports: [MessageListComponent, MessageInputComponent],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+  styleUrl: './chat.component.scss',
 })
 export class ChatComponent implements OnInit {
   messages: Message[] = [];

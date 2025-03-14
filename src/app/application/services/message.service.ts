@@ -7,11 +7,10 @@ import { SendMessageUseCase } from '../../domain/use-cases/send-message.use-case
   providedIn: 'root',
 })
 export class MessageService {
-
   constructor(
     private sendMessageUseCase: SendMessageUseCase,
-    private getMessagesUseCase: GetMessagesUseCase) {
-  }
+    private getMessagesUseCase: GetMessagesUseCase,
+  ) {}
 
   async sendMessage(content: string, senderId: string): Promise<void> {
     const message: Message = {

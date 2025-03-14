@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-message-input',
   imports: [FormsModule],
   templateUrl: './message-input.component.html',
-  styleUrl: './message-input.component.scss'
+  styleUrl: './message-input.component.scss',
 })
 export class MessageInputComponent {
   @Output() sendMessage = new EventEmitter<string>();

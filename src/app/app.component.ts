@@ -15,12 +15,14 @@ import { SendMessageUseCase } from './domain/use-cases/send-message.use-case';
     MessageService,
     {
       provide: GetMessagesUseCase,
-      useFactory: (messageRepository: MessageRepository) => new GetMessagesUseCase(messageRepository),
+      useFactory: (messageRepository: MessageRepository) =>
+        new GetMessagesUseCase(messageRepository),
       deps: [MessageRepository],
     },
     {
       provide: SendMessageUseCase,
-      useFactory: (messageRepository: MessageRepository) => new SendMessageUseCase(messageRepository),
+      useFactory: (messageRepository: MessageRepository) =>
+        new SendMessageUseCase(messageRepository),
       deps: [MessageRepository],
     },
     {
