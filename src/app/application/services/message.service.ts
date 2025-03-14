@@ -11,7 +11,7 @@ export class MessageService {
 
   async sendMessage(content: string, senderId: string): Promise<void> {
     const message: Message = {
-      id: crypto.randomUUID(), // Generar un ID único
+      id: crypto.randomUUID(),
       content,
       timestamp: new Date(),
       senderId,

@@ -20,7 +20,7 @@ export class ChatComponent {
   }
 
   async sendMessage(content: string) {
-    await this.messageService.sendMessage(content, 'user1'); // Simulamos un usuario fijo
+    await this.messageService.sendMessage(content, 'user1');
     this.messages = await this.messageService.getMessages();
   }
 }

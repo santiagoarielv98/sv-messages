@@ -13,6 +13,6 @@ export class InMemoryMessageRepository implements IMessageRepository {
   }
 
   async getAll(): Promise<Message[]> {
-    return [...this.messages]; // Devolver una copia para evitar mutaciones accidentales
+    return [...this.messages];
   }
 }
