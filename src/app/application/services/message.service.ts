@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Message } from '../../domain/entities/message';
-import { IMessageRepository, MESSAGE_REPOSITORY } from '../interfaces/message-repository.interface';
+import { IMessageRepository, MESSAGE_REPOSITORY } from '../../domain/repositories/message.repository';
 import { SendMessage } from '../../domain/use-cases/send-message';
 import { GetMessages } from '../../domain/use-cases/get-messages';
 

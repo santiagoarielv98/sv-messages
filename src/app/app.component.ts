@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MESSAGE_REPOSITORY } from './application/interfaces/message-repository.interface';
+import { MESSAGE_REPOSITORY } from './domain/repositories/message.repository';
 import { MessageService } from './application/services/message.service';
 import { InMemoryMessageRepository } from './infrastructure/repositories/in-memory-message.repository';
 

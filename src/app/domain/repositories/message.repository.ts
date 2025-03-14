@@ -1,8 +1,8 @@
-import { Message } from '../../domain/entities/message';
+import { Message } from '../entities/message';
 
 export interface IMessageRepository {
   send(message: Message): Promise<void>;
   getAll(): Promise<Message[]>;
 }
 
-export const MESSAGE_REPOSITORY = 'MESSAGE_REPOSITORY';
+export const MESSAGE_REPOSITORY = 'MESSAGE_REPOSITORY'; 

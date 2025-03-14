@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IMessageRepository } from '../../application/interfaces/message-repository.interface';
+import { IMessageRepository } from '../../domain/repositories/message.repository';
 import { Message } from '../../domain/entities/message';
 
 @Injectable({

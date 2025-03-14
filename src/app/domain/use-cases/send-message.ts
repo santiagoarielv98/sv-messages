@@ -1,5 +1,5 @@
 import { Message } from '../entities/message';
-import { IMessageRepository } from '../../application/interfaces/message-repository.interface';
+import { IMessageRepository } from '../repositories/message.repository';
 
 export class SendMessage {
     constructor(private messageRepository: IMessageRepository) { }
