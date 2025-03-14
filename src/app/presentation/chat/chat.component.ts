@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../application/services/message.service';
 import { Message } from '../../domain/entities/message';
 import { MessageListComponent } from "../components/message-list/message-list.component";
@@ -10,7 +10,7 @@ import { MessageInputComponent } from "../components/message-input/message-input
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   messages: Message[] = [];
 
   constructor(private messageService: MessageService) {}

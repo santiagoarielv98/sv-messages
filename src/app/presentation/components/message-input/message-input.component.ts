@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class MessageInputComponent {
   @Output() sendMessage = new EventEmitter<string>();
-  messageContent: string = '';
+  messageContent = '';
 
   onSend() {
     if (this.messageContent.trim()) {
