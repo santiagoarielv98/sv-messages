@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-message-input',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss'
 })
 export class MessageInputComponent {
+  @Output() sendMessage = new EventEmitter<string>();
+  messageContent: string = '';
 
+  onSend() {
+    if (this.messageContent.trim()) {
+      this.sendMessage.emit(this.messageContent);
+      this.messageContent = '';
+    }
+  }
 }

@@ -1,1 +1,5 @@
-<p>message-list works!</p>
+<div class="messages">
+    @for(msg of messages;track msg.id){
+        <app-message-item [message]="msg"/>
+    }
+</div>
