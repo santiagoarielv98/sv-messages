@@ -1,8 +1,8 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Message } from '../../domain/entities/message';
-import { IMessageRepository, MESSAGE_REPOSITORY } from '../../domain/repositories/message.repository';
-import { SendMessage } from '../../domain/use-cases/send-message';
+import { IMessageRepository } from '../../domain/repositories/message.repository';
 import { GetMessages } from '../../domain/use-cases/get-messages';
+import { SendMessage } from '../../domain/use-cases/send-message';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class MessageService {
   private sendMessageUseCase: SendMessage;
   private getMessagesUseCase: GetMessages;
 
-  constructor(@Inject(MESSAGE_REPOSITORY) private messageRepository: IMessageRepository) {
+  constructor(private messageRepository: IMessageRepository) {
     this.sendMessageUseCase = new SendMessage(messageRepository);
     this.getMessagesUseCase = new GetMessages(messageRepository);
   }

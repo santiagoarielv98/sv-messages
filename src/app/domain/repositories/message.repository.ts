@@ -1,8 +1,6 @@
 import { Message } from '../entities/message';
 
-export interface IMessageRepository {
-  send(message: Message): Promise<void>;
-  getAll(): Promise<Message[]>;
+export abstract class IMessageRepository {
+  abstract send(message: Message): Promise<void>;
+  abstract getAll(): Promise<Message[]>;
 }
-
-export const MESSAGE_REPOSITORY = 'MESSAGE_REPOSITORY'; 
