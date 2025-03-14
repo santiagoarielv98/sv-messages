@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/sv-messages/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
