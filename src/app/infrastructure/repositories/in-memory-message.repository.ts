@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { IMessageRepository } from '../../domain/repositories/message.repository';
+import { MessageRepository } from '../../domain/repositories/message.repository';
 import { Message } from '../../domain/entities/message';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InMemoryMessageRepository extends IMessageRepository {
+export class InMemoryMessageRepository extends MessageRepository {
   private messages: Message[] = [];
 
   async send(message: Message): Promise<void> {
