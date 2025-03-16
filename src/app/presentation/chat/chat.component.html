@@ -1,4 +1,4 @@
 <div class="chat-container">
-    <app-message-list [messages]="messages"></app-message-list>
+    <app-message-list [messages]="messages$ | async"></app-message-list>
     <app-message-input (sendMessage)="sendMessage($event)"></app-message-input>
 </div>

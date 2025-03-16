@@ -5,21 +5,22 @@ import { SendMessageUseCase } from '../../application/use-cases/send-message.use
 import { Message } from '../../domain/entities/message';
 import { MessageInputComponent } from '../components/message-input/message-input.component';
 import { MessageListComponent } from '../components/message-list/message-list.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-chat',
-  imports: [MessageListComponent, MessageInputComponent],
+  imports: [MessageListComponent, MessageInputComponent, AsyncPipe],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
 export class ChatComponent {
-  messages: Observable<Message[]>;
+  messages$: Observable<Message[]>;
 
   constructor(
     private getMessagesUseCase: GetMessagesUseCase,
     private sendMessageUseCase: SendMessageUseCase,
   ) {
-    this.messages = this.getMessagesUseCase.execute();
+    this.messages$ = this.getMessagesUseCase.execute();
   }
 
   sendMessage(content: string) {

@@ -18,9 +18,7 @@ export class FirebaseMessageRepository extends MessageRepository {
   items$ = collectionData(this.itemCollection);
 
   override getAll(): Observable<Message[]> {
-    return this.items$.pipe(
-      map((items) => items.map((item) => item as Message)),
-    );
+    return this.items$.pipe(map((items) => items as Message[]));
   }
   override async send(message: Message): Promise<void> {
     await addDoc(this.itemCollection, message);

@@ -9,5 +9,5 @@ import { MessageItemComponent } from '../message-item/message-item.component';
   styleUrl: './message-list.component.scss',
 })
 export class MessageListComponent {
-  @Input() messages: Message[] = [];
+  @Input() messages: Message[] | null = [];
 }
