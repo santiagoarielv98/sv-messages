@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MessageRepository } from '../../domain/repositories/message.repository';
 import { Message } from '../../domain/entities/message';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class InMemoryMessageRepository extends MessageRepository {
     this.messages.push(message);
   }
 
-  async getAll(): Promise<Message[]> {
-    return [...this.messages];
+  getAll(): Observable<Message[]> {
+    return of(this.messages);
   }
 }

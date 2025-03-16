@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Message } from '../../domain/entities/message';
-import { MessageListComponent } from '../components/message-list/message-list.component';
-import { MessageInputComponent } from '../components/message-input/message-input.component';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { GetMessagesUseCase } from '../../application/use-cases/get-messages.use-case';
 import { SendMessageUseCase } from '../../application/use-cases/send-message.use-case';
+import { Message } from '../../domain/entities/message';
+import { MessageInputComponent } from '../components/message-input/message-input.component';
+import { MessageListComponent } from '../components/message-list/message-list.component';
 
 @Component({
   selector: 'app-chat',
@@ -11,19 +12,22 @@ import { SendMessageUseCase } from '../../application/use-cases/send-message.use
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnInit {
-  messages: Message[] = [];
+export class ChatComponent {
+  messages: Observable<Message[]>;
+
   constructor(
     private getMessagesUseCase: GetMessagesUseCase,
     private sendMessageUseCase: SendMessageUseCase,
-  ) {}
-
-  async ngOnInit() {
-    this.messages = await this.getMessagesUseCase.execute();
+  ) {
+    this.messages = this.getMessagesUseCase.execute();
   }
 
-  async sendMessage(content: string) {
-    await this.sendMessageUseCase.execute(content);
-    this.messages = await this.getMessagesUseCase.execute();
+  sendMessage(content: string) {
+    this.sendMessageUseCase.execute({
+      id: crypto.randomUUID(),
+      content,
+      timestamp: new Date(),
+      senderId: 'user',
+    });
   }
 }

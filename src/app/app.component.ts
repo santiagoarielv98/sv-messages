@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GetMessagesUseCase } from './application/use-cases/get-messages.use-case';
-import { MessageRepository } from './domain/repositories/message.repository';
-import { InMemoryMessageRepository } from './infrastructure/repositories/in-memory-message.repository';
 import { SendMessageUseCase } from './application/use-cases/send-message.use-case';
+import { MessageRepository } from './domain/repositories/message.repository';
+import { FirebaseMessageRepository } from './infrastructure/repositories/firebase-message.repository';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -24,7 +24,7 @@ import { SendMessageUseCase } from './application/use-cases/send-message.use-cas
     },
     {
       provide: MessageRepository,
-      useClass: InMemoryMessageRepository,
+      useClass: FirebaseMessageRepository,
     },
   ],
 })
