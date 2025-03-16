@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '../../application/services/message.service';
 import { Message } from '../../domain/entities/message';
 import { MessageListComponent } from '../components/message-list/message-list.component';
 import { MessageInputComponent } from '../components/message-input/message-input.component';
+import { GetMessagesUseCase } from '../../application/use-cases/get-messages.use-case';
+import { SendMessageUseCase } from '../../application/use-cases/send-message.use-case';
 
 @Component({
   selector: 'app-chat',
@@ -12,15 +13,17 @@ import { MessageInputComponent } from '../components/message-input/message-input
 })
 export class ChatComponent implements OnInit {
   messages: Message[] = [];
-
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private getMessagesUseCase: GetMessagesUseCase,
+    private sendMessageUseCase: SendMessageUseCase,
+  ) {}
 
   async ngOnInit() {
-    this.messages = await this.messageService.getMessages();
+    this.messages = await this.getMessagesUseCase.execute();
   }
 
   async sendMessage(content: string) {
-    await this.messageService.sendMessage(content, 'user1');
-    this.messages = await this.messageService.getMessages();
+    await this.sendMessageUseCase.execute(content);
+    this.messages = await this.getMessagesUseCase.execute();
   }
 }
