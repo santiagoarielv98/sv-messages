@@ -4,6 +4,13 @@ import { GetMessagesUseCase } from './application/use-cases/get-messages.use-cas
 import { SendMessageUseCase } from './application/use-cases/send-message.use-case';
 import { MessageRepository } from './domain/repositories/message.repository';
 import { FirebaseMessageRepository } from './infrastructure/repositories/firebase-message.repository';
+import { FirebaseAuthRepository } from './infrastructure/repositories/firebase-auth.repository';
+import { AuthRepository } from './domain/repositories/auth.repository';
+import {
+  GetCurrentUserUseCase,
+  SignInUseCase,
+  SignOutUseCase,
+} from './application/use-cases/auth.use-case';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -25,6 +32,28 @@ import { FirebaseMessageRepository } from './infrastructure/repositories/firebas
     {
       provide: MessageRepository,
       useClass: FirebaseMessageRepository,
+    },
+    {
+      provide: AuthRepository,
+      useClass: FirebaseAuthRepository,
+    },
+    {
+      provide: GetCurrentUserUseCase,
+      useFactory: (authRepository: AuthRepository) =>
+        new GetCurrentUserUseCase(authRepository),
+      deps: [AuthRepository],
+    },
+    {
+      provide: SignInUseCase,
+      useFactory: (authRepository: AuthRepository) =>
+        new SignInUseCase(authRepository),
+      deps: [AuthRepository],
+    },
+    {
+      provide: SignOutUseCase,
+      useFactory: (authRepository: AuthRepository) =>
+        new SignOutUseCase(authRepository),
+      deps: [AuthRepository],
     },
   ],
 })

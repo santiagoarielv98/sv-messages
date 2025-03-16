@@ -1,4 +1,10 @@
 <div class="chat-container">
     <app-message-list [messages]="messages$ | async"></app-message-list>
     <app-message-input (sendMessage)="sendMessage($event)"></app-message-input>
+
+    @if(userSubscription){
+        <button (click)="logout()">Logout</button>
+    } @else {
+        <button (click)="login()">Login</button>
+    }
 </div>
