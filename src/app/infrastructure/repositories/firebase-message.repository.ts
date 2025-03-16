@@ -14,7 +14,7 @@ export const messagesCollection = 'messages';
 @Injectable({ providedIn: 'root' })
 export class FirebaseMessageRepository extends MessageRepository {
   firestore = inject(Firestore);
-  itemCollection = collection(this.firestore, 'items');
+  itemCollection = collection(this.firestore, messagesCollection);
   items$ = collectionData(this.itemCollection);
 
   override getAll(): Observable<Message[]> {
