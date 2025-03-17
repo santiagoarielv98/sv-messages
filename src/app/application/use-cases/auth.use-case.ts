@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
+import { SignInRequest } from '../dtos/sign-in.request';
 
 @Injectable({ providedIn: 'root' })
 export class SignInUseCase {
   constructor(private authRepository: AuthRepository) {}
 
-  execute(): Promise<void> {
-    return this.authRepository.signIn('1', '2');
+  execute({ email, password }: Partial<SignInRequest> = {}): Promise<void> {
+    return this.authRepository.signIn(email, password);
   }
 }
 

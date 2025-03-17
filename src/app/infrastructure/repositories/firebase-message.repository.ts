@@ -4,6 +4,8 @@ import {
   collection,
   collectionData,
   Firestore,
+  query,
+  orderBy,
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
 import { Message } from '../../domain/entities/message';
@@ -15,11 +17,14 @@ export const messagesCollection = 'messages';
 export class FirebaseMessageRepository extends MessageRepository {
   firestore = inject(Firestore);
   itemCollection = collection(this.firestore, messagesCollection);
-  items$ = collectionData(this.itemCollection);
+
+  itemsQuery = query(this.itemCollection, orderBy('timestamp', 'asc'));
+  items$ = collectionData(this.itemsQuery);
 
   override getAll(): Observable<Message[]> {
     return this.items$.pipe(map((items) => items as Message[]));
   }
+
   override async send(message: Message): Promise<void> {
     await addDoc(this.itemCollection, message);
   }
