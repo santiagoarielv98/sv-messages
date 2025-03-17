@@ -1,4 +1,10 @@
-<div class="message-input">
-    <input [(ngModel)]="messageContent" type="text" placeholder="Escribe un mensaje..." (keyup.enter)="onSend()" />
-    <button (click)="onSend()">Enviar</button>
-</div>
+<mat-toolbar class="message-input">
+    <mat-toolbar-row>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput placeholder="Placeholder" [(ngModel)]="messageContent" (keyup.enter)="onSend()">
+        </mat-form-field>
+        <button mat-icon-button aria-label="Send" (click)="onSend()">
+            <mat-icon>send</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>

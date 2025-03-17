@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+
+.message-input {
+    mat-form-field {
+        width: 100%;
+    }
+
+    @include mat.icon-button-overrides((state-layer-size:56px));
+
+    mat-toolbar-row {
+        gap: 8px;
+    }
+}
