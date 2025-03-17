@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SignInUseCase {
   constructor(private authRepository: AuthRepository) {}
 
@@ -10,7 +10,7 @@ export class SignInUseCase {
   }
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SignOutUseCase {
   constructor(private authRepository: AuthRepository) {}
 
@@ -19,7 +19,7 @@ export class SignOutUseCase {
   }
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GetCurrentUserUseCase {
   constructor(private authRepository: AuthRepository) {}
 

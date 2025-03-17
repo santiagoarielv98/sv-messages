@@ -3,9 +3,7 @@ import { MessageRepository } from '../../domain/repositories/message.repository'
 import { Message } from '../../domain/entities/message';
 import { Observable, of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class InMemoryMessageRepository extends MessageRepository {
   private messages: Message[] = [];
 
