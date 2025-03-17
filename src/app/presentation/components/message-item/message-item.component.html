@@ -1,8 +1,10 @@
-<mat-card appearance="outlined">
-    <mat-card-header>
-        <mat-card-subtitle>{{message.senderName}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <p>{{message.content}}</p>
-    </mat-card-content>
-</mat-card>
+<div class="message-item" [ngClass]="{'message-item--right': isOwn}">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-subtitle>{{message.senderName}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{message.content}}</p>
+        </mat-card-content>
+    </mat-card>
+</div>

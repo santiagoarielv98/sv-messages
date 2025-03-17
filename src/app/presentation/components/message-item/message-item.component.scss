@@ -1,0 +1,13 @@
+.message-item {
+    padding-inline: 2rem;
+    display: flex;
+
+    &.message-item--right {
+        justify-content: flex-end;
+    }
+
+}
+
+.message-card {
+    display: flex;
+}
