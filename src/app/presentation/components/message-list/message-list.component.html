@@ -1,5 +1,7 @@
+@let user = currentUser$ | async;
+
 <div class="messages">
     @for(msg of messages;track msg.id){
-        <app-message-item [message]="msg"/>
+    <app-message-item [message]="msg" [isOwn]="msg.senderId === user?.uid" />
     }
 </div>

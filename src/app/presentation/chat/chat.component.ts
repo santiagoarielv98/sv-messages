@@ -1,10 +1,11 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
-import { firstValueFrom, Observable, Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { firstValueFrom, Observable } from 'rxjs';
 import { GetCurrentUserUseCase } from '../../application/use-cases/auth.use-case';
 import { GetMessagesUseCase } from '../../application/use-cases/get-messages.use-case';
 import { SendMessageUseCase } from '../../application/use-cases/send-message.use-case';
 import { Message } from '../../domain/entities/message';
+import { User } from '../../domain/entities/user';
 import { MessageInputComponent } from '../components/message-input/message-input.component';
 import { MessageListComponent } from '../components/message-list/message-list.component';
 
@@ -14,8 +15,8 @@ import { MessageListComponent } from '../components/message-list/message-list.co
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnDestroy {
-  userSubscription: Subscription;
+export class ChatComponent {
+  currentUser$: Observable<User | null>;
 
   messages$: Observable<Message[]>;
 
@@ -25,15 +26,11 @@ export class ChatComponent implements OnDestroy {
     private getCurrentUserUseCase: GetCurrentUserUseCase,
   ) {
     this.messages$ = this.getMessagesUseCase.execute();
-    this.userSubscription = this.getCurrentUserUseCase.execute().subscribe();
-  }
-
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+    this.currentUser$ = this.getCurrentUserUseCase.execute();
   }
 
   async sendMessage(content: string) {
-    const user = await firstValueFrom(this.getCurrentUserUseCase.execute());
+    const user = await firstValueFrom(this.currentUser$);
 
     this.sendMessageUseCase.execute({
       id: crypto.randomUUID(),

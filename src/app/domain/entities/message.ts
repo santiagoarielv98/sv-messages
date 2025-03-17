@@ -5,4 +5,5 @@ export interface Message {
   senderId: string;
   senderName: string;
   senderAvatar: string;
+  isOwnMessage?: boolean;
 }
