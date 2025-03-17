@@ -1,1 +1,9 @@
 <router-outlet />
+@let user = currentUser$ | async;
+
+@if(user) {
+    <h1>Welcome, {{ user.displayName }}</h1>
+    <button (click)="logout()">Logout</button>
+}@else{
+    <button (click)="login()">Login</button>
+}
