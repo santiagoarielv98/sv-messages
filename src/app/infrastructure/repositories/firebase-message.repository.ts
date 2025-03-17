@@ -4,8 +4,8 @@ import {
   collection,
   collectionData,
   Firestore,
-  query,
   orderBy,
+  query,
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
 import { Message } from '../../domain/entities/message';
