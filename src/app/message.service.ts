@@ -1,6 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { collection, Firestore } from '@angular/fire/firestore';
-import { chatCollection } from './chat.service';
+import { Injectable } from '@angular/core';
 
 export interface Message {
   id: string;
@@ -13,7 +11,4 @@ export const messageCollection = 'messages';
 @Injectable({
   providedIn: 'root',
 })
-export class MessageService {
-  firestore = inject(Firestore);
-  chatCollection = collection(this.firestore, chatCollection);
-}
+export class MessageService {}
