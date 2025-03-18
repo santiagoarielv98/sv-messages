@@ -8,7 +8,7 @@ export class FirebaseChatMapper {
     };
   }
 
-  static toFirestore(data: Omit<ChatEntity, 'id'>): Omit<ChatEntity, 'id'> {
+  static toFirestore(data: ChatEntity): Omit<ChatEntity, 'id'> {
     return {
       messages: data.messages ? data.messages : [],
       lastMessage: null,

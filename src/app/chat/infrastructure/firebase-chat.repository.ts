@@ -13,6 +13,7 @@ import { Observable, from, map } from 'rxjs';
 import { ChatEntity } from '../domain/chat.entity';
 import { ChatRepository } from '../domain/chat.repository';
 import { FirebaseChatMapper } from './firebase-chat.mapper';
+import { MessageEntity } from '../domain/message.entity';
 
 export class FirebaseChatRepository extends ChatRepository {
   firestore = inject(Firestore);
@@ -21,6 +22,7 @@ export class FirebaseChatRepository extends ChatRepository {
 
   override createChat(participants: string[]): Observable<ChatEntity> {
     const newChat = FirebaseChatMapper.toFirestore({
+      id: '',
       lastMessage: null,
       messages: [],
       participants,
@@ -51,6 +53,24 @@ export class FirebaseChatRepository extends ChatRepository {
         } else {
           return null;
         }
+      }),
+    );
+  }
+  override getLastMessages(chatId: string): Observable<MessageEntity[]> {
+    const messageRef = collection(this.firestore, 'chats', chatId, 'messages');
+    const q = query(messageRef);
+
+    return collectionData(q, { idField: 'id' }) as Observable<MessageEntity[]>;
+  }
+  override sendMessage(
+    chatId: string,
+    message: MessageEntity,
+  ): Observable<void> {
+    const messagesRef = collection(this.firestore, 'chats', chatId, 'messages');
+
+    return from(addDoc(messagesRef, message)).pipe(
+      map(() => {
+        //
       }),
     );
   }

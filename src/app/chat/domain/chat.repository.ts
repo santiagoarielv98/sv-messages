@@ -1,16 +1,14 @@
 import { Observable } from 'rxjs';
 import { ChatEntity } from './chat.entity';
+import { MessageEntity } from './message.entity';
 
 export abstract class ChatRepository {
   abstract createChat(participants: string[]): Observable<ChatEntity>;
   abstract getChatsByUser(userId: string): Observable<ChatEntity[]>;
   abstract getChatById(chatId: string): Observable<ChatEntity | null>;
-  // abstract createChat(chat: ChatEntity): Observable<ChatEntity>;
-
-  // abstract findChatById(chatId:   string): Observable<ChatEntity | null>;
-  // abstract addMessageToChat(
-  //   chatId: string,
-  //   message: MessageEntity,
-  // ): Observable<void>;
-  // abstract getChatsByUser(userId: string): Observable<ChatEntity[]>;
+  abstract getLastMessages(chatId: string): Observable<MessageEntity[]>;
+  abstract sendMessage(
+    chatId: string,
+    message: MessageEntity,
+  ): Observable<void>;
 }

@@ -1,24 +1,38 @@
 <router-outlet />
 
-@if(currentUser) {
+@if(user) {
 <div>
-    <h1>Welcome, {{currentUser.displayName}}</h1>
+    <h1>Welcome, {{user.displayName}}</h1>
     <button (click)="logout()">Logout</button>
     <button (click)="createChat()">Create Chat</button>
 </div>
 
-@if(userChats.length){
-    @for (chat of userChats; track chat.id) {
+@if(chats.length){
+    @for (chat of chats; track chat.id) {
         <button (click)="openChat(chat)">
             <h2>{{chat.id}}</h2>
         </button>
     }
 }
 
-@if(currentChat) {
+@if(chat) {
     <div>
-        <h2>Chat with {{currentChat.id}}</h2>
+        <h2>Chat with {{chat.id}}</h2>
     </div>
+    <form (ngSubmit)="sendMessage()">
+        <input [(ngModel)]="message" 
+        name="message"
+        placeholder="Type a message" />
+        <button type="submit">Send</button>
+    </form>
+    @if(messages.length) {
+        @for (message of messages; track message.id) {
+            <div>
+                <p>{{message.content}}</p>
+            </div>
+        }
+    }
+
 }
 
 } @else {
