@@ -4,6 +4,7 @@ import { GetChatsByUserUseCase } from './application/get-chats-by-user.use-case'
 import { ChatRepository } from './domain/chat.repository';
 import { FirebaseChatRepository } from './infrastructure/firebase-chat.repository';
 import { CreateChatUseCase } from './application/create-chat.use-case';
+import { GetChatByIdUseCase } from './application/get-chat-by-id.use-case';
 
 export const getChatsByUserUseCaseFactory = (chatRepository: ChatRepository) =>
   new GetChatsByUserUseCase(chatRepository);
@@ -20,12 +21,21 @@ export const createChatUseCaseProvider = {
   useFactory: createChatUseCaseFactory,
   deps: [ChatRepository],
 };
+export const getChatByIdUseCaseFactory = (chatRepository: ChatRepository) =>
+  new GetChatByIdUseCase(chatRepository);
+export const getChatByIdUseCaseProvider = {
+  provide: GetChatByIdUseCase,
+  useFactory: getChatByIdUseCaseFactory,
+  deps: [ChatRepository],
+};
+
 @NgModule({
   declarations: [],
   imports: [CommonModule],
   providers: [
     getChatsByUserUseCaseProvider,
     createChatUseCaseProvider,
+    getChatByIdUseCaseProvider,
     { provide: ChatRepository, useClass: FirebaseChatRepository },
   ],
 })

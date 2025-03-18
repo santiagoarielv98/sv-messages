@@ -9,10 +9,16 @@
 
 @if(userChats.length){
     @for (chat of userChats; track chat.id) {
-        <div>
+        <button (click)="openChat(chat)">
             <h2>{{chat.id}}</h2>
-        </div>
+        </button>
     }
+}
+
+@if(currentChat) {
+    <div>
+        <h2>Chat with {{currentChat.id}}</h2>
+    </div>
 }
 
 } @else {

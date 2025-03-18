@@ -4,6 +4,8 @@ import {
   addDoc,
   collection,
   collectionData,
+  doc,
+  getDoc,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -36,5 +38,20 @@ export class FirebaseChatRepository extends ChatRepository {
     );
 
     return collectionData(q, { idField: 'id' }) as Observable<ChatEntity[]>;
+  }
+
+  override getChatById(chatId: string): Observable<ChatEntity | null> {
+    const chatDocRef = doc(this.firestore, 'chats', chatId);
+
+    return from(getDoc(chatDocRef)).pipe(
+      map((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const chatData = docSnapshot.data() as ChatEntity;
+          return FirebaseChatMapper.toEntity(chatData, chatId);
+        } else {
+          return null;
+        }
+      }),
+    );
   }
 }

@@ -8,6 +8,7 @@ import { GetChatsByUserUseCase } from './chat/application/get-chats-by-user.use-
 import { ChatModule } from './chat/chat.module';
 import { ChatEntity } from './chat/domain/chat.entity';
 import { CreateChatUseCase } from './chat/application/create-chat.use-case';
+import { GetChatByIdUseCase } from './chat/application/get-chat-by-id.use-case';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, UserModule, ChatModule],
@@ -19,40 +20,51 @@ export class AppComponent {
   title = 'sv-messages';
 
   currentUser: UserEntity | null = null;
-  userChats: ChatEntity[] = []; // Added property to store user chats
+  userChats: ChatEntity[] = [];
+  currentChat: ChatEntity | null = null;
 
   constructor(
     private getCurrentUserUseCase: GetCurrentUserUseCase,
     private googleLoginUseCase: GoogleLoginUseCase,
     private getChatsByUserUseCase: GetChatsByUserUseCase,
     private createChatUseCase: CreateChatUseCase,
+    private getChatByIdUseCase: GetChatByIdUseCase,
   ) {
     this.getCurrentUserUseCase.execute().subscribe((user) => {
       this.currentUser = user;
-      this.fetchChatsIfUserExists(); // Fetch chats after user is loaded
+      this.fetchChatsIfUserExists();
     });
   }
 
   logout() {
     this.currentUser = null;
-    this.userChats = []; // Clear chats when user logs out
+    this.userChats = [];
   }
 
   login() {
     this.googleLoginUseCase.execute().subscribe((user) => {
       this.currentUser = user;
-      this.fetchChatsIfUserExists(); // Fetch chats after login
+      this.fetchChatsIfUserExists();
     });
   }
 
-  async createChat() {
+  createChat() {
     if (this.currentUser) {
       const participants = [this.currentUser.uid];
       this.createChatUseCase.execute(participants);
     }
   }
 
-  // New method to fetch chats if user exists
+  openChat(chat: ChatEntity) {
+    // console.log('Opening chat:', chat);
+    if (this.currentUser) {
+      this.getChatByIdUseCase.execute(chat.id).subscribe((chat) => {
+        console.log('Chat:', chat);
+        this.currentChat = chat;
+      });
+    }
+  }
+
   private fetchChatsIfUserExists() {
     if (this.currentUser) {
       this.getChatsByUserUseCase
