@@ -10,5 +10,9 @@ export abstract class ChatRepository {
   abstract sendMessage(
     chatId: string,
     message: MessageEntity,
+  ): Observable<MessageEntity>;
+  abstract updateLastMessage(
+    chatId: string,
+    message: MessageEntity,
   ): Observable<void>;
 }

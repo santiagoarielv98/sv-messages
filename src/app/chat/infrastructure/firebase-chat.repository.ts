@@ -6,14 +6,17 @@ import {
   collectionData,
   doc,
   getDoc,
+  orderBy,
   query,
   where,
+  updateDoc,
+  serverTimestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { ChatEntity } from '../domain/chat.entity';
 import { ChatRepository } from '../domain/chat.repository';
-import { FirebaseChatMapper } from './firebase-chat.mapper';
 import { MessageEntity } from '../domain/message.entity';
+import { FirebaseChatMapper } from './firebase-chat.mapper';
 
 export class FirebaseChatRepository extends ChatRepository {
   firestore = inject(Firestore);
@@ -58,20 +61,44 @@ export class FirebaseChatRepository extends ChatRepository {
   }
   override getLastMessages(chatId: string): Observable<MessageEntity[]> {
     const messageRef = collection(this.firestore, 'chats', chatId, 'messages');
-    const q = query(messageRef);
-
+    const q = query(messageRef, orderBy('timestamp', 'desc'));
     return collectionData(q, { idField: 'id' }) as Observable<MessageEntity[]>;
   }
   override sendMessage(
     chatId: string,
     message: MessageEntity,
-  ): Observable<void> {
+  ): Observable<MessageEntity> {
     const messagesRef = collection(this.firestore, 'chats', chatId, 'messages');
 
-    return from(addDoc(messagesRef, message)).pipe(
-      map(() => {
-        //
-      }),
+    // Create a copy of the message with server timestamp
+    const messageToSave = {
+      ...message,
+      timestamp: serverTimestamp(),
+    };
+
+    return from(addDoc(messagesRef, messageToSave)).pipe(
+      map((docRef) => ({
+        ...message,
+        id: docRef.id,
+      })),
     );
+  }
+
+  override updateLastMessage(
+    chatId: string,
+    message: MessageEntity,
+  ): Observable<void> {
+    const chatDocRef = doc(this.firestore, 'chats', chatId);
+
+    // Create a serializable version of the message for lastMessage field
+    const lastMessageData = {
+      id: message.id,
+      content: message.content,
+      senderId: message.senderId,
+      chatId: message.chatId,
+      timestamp: serverTimestamp(),
+    };
+
+    return from(updateDoc(chatDocRef, { lastMessage: lastMessageData }));
   }
 }

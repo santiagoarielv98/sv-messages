@@ -8,30 +8,38 @@
 </div>
 
 @if(chats.length){
-    @for (chat of chats; track chat.id) {
-        <button (click)="openChat(chat)">
-            <h2>{{chat.id}}</h2>
-        </button>
+@for (chat of chats; track chat.id) {
+<button (click)="openChat(chat)">
+    <h2>{{chat.id}}</h2>
+    @if(chat.lastMessage) {
+    <p>Last message: {{chat.lastMessage.content}}</p>
     }
+</button>
+}
 }
 
 @if(chat) {
-    <div>
-        <h2>Chat with {{chat.id}}</h2>
-    </div>
-    <form (ngSubmit)="sendMessage()">
-        <input [(ngModel)]="message" 
-        name="message"
-        placeholder="Type a message" />
-        <button type="submit">Send</button>
-    </form>
-    @if(messages.length) {
-        @for (message of messages; track message.id) {
-            <div>
-                <p>{{message.content}}</p>
-            </div>
+<div>
+    <h2>Chat with {{chat.id}}</h2>
+    <p>Last Message: 
+        @if(chat.lastMessage) {
+        {{chat.lastMessage.content}}
+        } @else {
+        No messages yet
         }
-    }
+    </p>
+</div>
+<form (ngSubmit)="sendMessage()">
+    <input [(ngModel)]="message" name="message" placeholder="Type a message" />
+    <button type="submit">Send</button>
+</form>
+@if(messages.length) {
+@for (message of messages; track message.id) {
+<div>
+    <p>{{message.content}}</p>
+</div>
+}
+}
 
 }
 
