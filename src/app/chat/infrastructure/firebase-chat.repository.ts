@@ -1,9 +1,11 @@
 import { inject } from '@angular/core';
 import {
-  collection,
-  collectionData,
   Firestore,
   addDoc,
+  collection,
+  collectionData,
+  query,
+  where,
 } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { ChatEntity } from '../domain/chat.entity';
@@ -29,5 +31,14 @@ export class FirebaseChatRepository extends ChatRepository {
         };
       }),
     );
+  }
+
+  override getChatsByUser(userId: string): Observable<ChatEntity[]> {
+    const q = query(
+      this.itemCollection,
+      where('participants', 'array-contains', userId),
+    );
+
+    return collectionData(q, { idField: 'id' }) as Observable<ChatEntity[]>;
   }
 }
