@@ -1,26 +1,20 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  model,
-  signal,
-} from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
+import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ChatService } from '../../chat.service';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { CreateChatDialogComponent } from '../create-chat-dialog/create-chat-dialog.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sidenav',
@@ -45,8 +39,6 @@ export class SidenavComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private chatService = inject(ChatService);
 
-  readonly animal = signal('');
-  readonly name = model('');
   readonly dialog = inject(MatDialog);
 
   chats$ = this.chatService.chats$;
@@ -58,15 +50,6 @@ export class SidenavComponent {
     );
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(CreateChatDialogComponent, {
-      data: { name: this.name(), animal: this.animal() },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
-      }
-    });
+    this.dialog.open(CreateChatDialogComponent);
   }
 }
