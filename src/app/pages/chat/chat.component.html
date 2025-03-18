@@ -1,1 +1,10 @@
-<p>chat works!</p>
+@for (message of messages$ | async; track message.id) {
+    <p>
+        {{ message.content }}
+    </p>
+}
+
+<div class="chat-input">
+    <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message..." />
+    <button (click)="sendMessage()">Send</button>
+</div>
