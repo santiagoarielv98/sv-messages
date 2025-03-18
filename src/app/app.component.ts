@@ -7,6 +7,7 @@ import { GoogleLoginUseCase } from './user/application/google-login.use-case';
 import { GetChatsByUserUseCase } from './chat/application/get-chats-by-user.use-case';
 import { ChatModule } from './chat/chat.module';
 import { ChatEntity } from './chat/domain/chat.entity';
+import { CreateChatUseCase } from './chat/application/create-chat.use-case';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, UserModule, ChatModule],
@@ -24,6 +25,7 @@ export class AppComponent {
     private getCurrentUserUseCase: GetCurrentUserUseCase,
     private googleLoginUseCase: GoogleLoginUseCase,
     private getChatsByUserUseCase: GetChatsByUserUseCase,
+    private createChatUseCase: CreateChatUseCase,
   ) {
     this.getCurrentUserUseCase.execute().subscribe((user) => {
       this.currentUser = user;
@@ -41,6 +43,13 @@ export class AppComponent {
       this.currentUser = user;
       this.fetchChatsIfUserExists(); // Fetch chats after login
     });
+  }
+
+  async createChat() {
+    if (this.currentUser) {
+      const participants = [this.currentUser.uid];
+      this.createChatUseCase.execute(participants);
+    }
   }
 
   // New method to fetch chats if user exists

@@ -4,6 +4,7 @@
 <div>
     <h1>Welcome, {{currentUser.displayName}}</h1>
     <button (click)="logout()">Logout</button>
+    <button (click)="createChat()">Create Chat</button>
 </div>
 
 @if(userChats.length){

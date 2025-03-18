@@ -10,6 +10,7 @@ import {
 import { Observable, from, map } from 'rxjs';
 import { ChatEntity } from '../domain/chat.entity';
 import { ChatRepository } from '../domain/chat.repository';
+import { FirebaseChatMapper } from './firebase-chat.mapper';
 
 export class FirebaseChatRepository extends ChatRepository {
   firestore = inject(Firestore);
@@ -17,19 +18,13 @@ export class FirebaseChatRepository extends ChatRepository {
   item$ = collectionData(this.itemCollection);
 
   override createChat(participants: string[]): Observable<ChatEntity> {
-    const newChat: Omit<ChatEntity, 'id'> = {
-      participants,
+    const newChat = FirebaseChatMapper.toFirestore({
       messages: [],
-    };
+      participants,
+    });
 
     return from(addDoc(this.itemCollection, newChat)).pipe(
-      map((docRef) => {
-        return {
-          id: docRef.id,
-          participants,
-          messages: [],
-        };
-      }),
+      map((docRef) => FirebaseChatMapper.toEntity(newChat, docRef.id)),
     );
   }
 
