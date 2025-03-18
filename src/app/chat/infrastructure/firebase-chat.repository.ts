@@ -19,6 +19,7 @@ export class FirebaseChatRepository extends ChatRepository {
 
   override createChat(participants: string[]): Observable<ChatEntity> {
     const newChat = FirebaseChatMapper.toFirestore({
+      lastMessage: null,
       messages: [],
       participants,
     });
