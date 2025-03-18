@@ -1,0 +1,32 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>
+      <span>Chats</span>
+      <span class="spacer"></span>
+      <button type="button" aria-label="Create chat" mat-icon-button (click)="openDialog()">
+        <mat-icon class="material-symbols-outlined" aria-label="Create chat icon">chat_add_on</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      @for (chat of chats$ | async; track chat.id) {
+        <a mat-list-item [routerLink]="['/chat', chat.id]">
+          {{ chat.name || 'Chat ' + chat.id }}
+        </a>
+      } @empty {
+        <div class="no-chats">No hay chats disponibles</div>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      @if (isHandset$ | async) {
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      }
+      <span>sv-messages</span>
+    </mat-toolbar>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

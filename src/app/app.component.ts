@@ -7,6 +7,4 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss',
   providers: [],
 })
-export class AppComponent {
-  title = 'sv-messages';
-}
+export class AppComponent {}
