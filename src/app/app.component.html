@@ -1,1 +1,13 @@
 <router-outlet />
+
+@if(currentUser) {
+<div>
+    <h1>Welcome, {{currentUser.displayName}}</h1>
+    <button (click)="logout()">Logout</button>
+</div>
+} @else {
+<div>
+    <h1>Welcome, Guest</h1>
+    <button (click)="login()">Login</button>
+</div>
+}

@@ -17,7 +17,7 @@ import { FirebaseUserMapper } from './firebase-user.mapper';
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseAuthService extends AuthRepository {
+export class FirebaseAuthRepository extends AuthRepository {
   private auth = inject(Auth);
   private user$ = user(this.auth);
 
