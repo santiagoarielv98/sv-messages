@@ -1,5 +1,7 @@
+@let isHandset = isHandset$ | async;
+
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+  <mat-sidenav  class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
     <mat-toolbar>
       <span>Chats</span>
@@ -20,12 +22,17 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      @if (isHandset$ | async) {
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      <a mat-button [routerLink]="['/']" routerLinkActive="active">
+        <mat-icon class="material-symbols-outlined" aria-label="Home icon">home</mat-icon>
+        <span class="nav-text">Home</span>
+      </a>
+      @if (isHandset ) {
+        <span class="spacer"></span>
+
+        <button type="button" aria-label="Create chat" mat-icon-button (click)="openDialog()">
+          <mat-icon class="material-symbols-outlined" aria-label="Create chat icon">chat_add_on</mat-icon>
         </button>
       }
-      <span>sv-messages</span>
     </mat-toolbar>
     <router-outlet />
   </mat-sidenav-content>
