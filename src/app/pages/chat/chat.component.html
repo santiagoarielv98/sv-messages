@@ -1,8 +1,8 @@
 @let messages = messages$ | async;
 
-<div class="chat-container">
+<div class="chat-container" #chatContainer>
     <span class="chat-spacer"></span>
-    <div class="chat-messages">
+    <div class="chat-messages" >
         @for(message of messages; track message.id; let i = $index) {
         <div class="message-container"
             [ngClass]="{ 'message-sent': message.sender === 'currentUser', 'message-received': message.sender !== 'currentUser' }">
