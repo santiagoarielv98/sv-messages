@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ChatService } from '../../chat.service';
@@ -36,8 +36,10 @@ import { CreateChatDialogComponent } from '../create-chat-dialog/create-chat-dia
   ],
 })
 export class SidenavComponent {
+  title = 'SV / Messages';
   private breakpointObserver = inject(BreakpointObserver);
   private chatService = inject(ChatService);
+  private router = inject(Router);
 
   readonly dialog = inject(MatDialog);
 
@@ -51,5 +53,27 @@ export class SidenavComponent {
 
   openDialog(): void {
     this.dialog.open(CreateChatDialogComponent);
+  }
+
+  isRouteActive(chatId: string): boolean {
+    return this.router.isActive(`/chat/${chatId}`, {
+      paths: 'exact',
+      queryParams: 'exact',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+    });
+  }
+
+  isChatRouteActive(): boolean {
+    return this.router.isActive('/chat', {
+      paths: 'subset',
+      queryParams: 'exact',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 }

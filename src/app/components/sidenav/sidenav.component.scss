@@ -1,26 +1,86 @@
 .sidenav-container {
   height: 100%;
+  background-color: #f9f9f9;
 }
 
 .sidenav {
-  width: 25rem
+  width: 25rem;
+  border-radius: 0;
+  // box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+  border-right: none;
+  background-color: #ffffff;
 }
 
-.sidenav .mat-toolbar {
-  background: inherit;
+.mat-toolbar {
+  background: #0060a8;
+  color: white;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #0079d2;
+}
+
+.sidenav-toolbar{
+  box-shadow: none !important;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
-.sidenav-content{
+.sidenav-content {
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
+}
+
+/* Chat list styling */
+.chat-link {
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease;
+}
+
+.chat-link:hover {
+  background-color: #eaf1ff;
+}
+
+.chat-link[ng-reflect-activated="true"] {
+  background-color: #d3e4ff;
+  border-left: 4px solid #0060a8;
+}
+
+.chat-link mat-icon {
+  color: #0060a8;
+}
+
+/* Empty state styling */
+.no-chats {
+  padding: 30px 16px;
+  text-align: center;
+  color: #767777;
+  font-style: italic;
+}
+
+/* Button styling */
+button[mat-icon-button] {
+  color: white;
+}
+
+button[mat-icon-button]:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidenav {
+    width: 85%;
+    max-width: 25rem;
+  }
 }

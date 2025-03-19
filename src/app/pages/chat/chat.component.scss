@@ -118,8 +118,6 @@
 }
 
 .chat-toolbar {
-    @include mat.toolbar-overrides((container-background-color: var(--mat-sys-surface-container-low),
-        ));
     padding: 8px;
 }
 
