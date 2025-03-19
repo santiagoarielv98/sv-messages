@@ -11,7 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Chat, ChatService, Message } from '../../chat.service';
+import { ChatService } from '../../chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -36,41 +36,38 @@ import { Chat, ChatService, Message } from '../../chat.service';
 })
 export class ChatComponent {
   private chatService = inject(ChatService);
-  chats: Chat[] = this.chatService.chats;
-  selectedChat: Chat | null = this.chatService.selectedChat;
+  chats = this.chatService.chats;
+  selectedChat = this.chatService.selectedChat;
   newMessage = '';
 
   sendMessage() {
-    if (this.selectedChat && this.newMessage.trim()) {
-      const newMsg: Message = {
-        id: this.selectedChat.messages.length + 1,
-        text: this.newMessage,
-        sender: 'me',
-        timestamp: new Date(),
-        read: false,
-      };
-
-      this.selectedChat.messages.push(newMsg);
-      this.selectedChat.lastMessage = this.newMessage;
-      this.selectedChat.timestamp = new Date();
-      this.newMessage = '';
-
-      // Simular respuesta después de un breve retraso
-      setTimeout(() => {
-        if (this.selectedChat) {
-          const response: Message = {
-            id: this.selectedChat.messages.length + 1,
-            text: '👍 Recibido',
-            sender: 'other',
-            timestamp: new Date(),
-            read: true,
-          };
-
-          this.selectedChat.messages.push(response);
-          this.selectedChat.lastMessage = response.text;
-          this.selectedChat.timestamp = new Date();
-        }
-      }, 1500);
-    }
+    // if (this.selectedChat && this.newMessage.trim()) {
+    //   const newMsg: Message = {
+    //     id: this.selectedChat().messages.length + 1,
+    //     text: this.newMessage,
+    //     sender: 'me',
+    //     timestamp: new Date(),
+    //     read: false,
+    //   };
+    //   this.selectedChat.messages.push(newMsg);
+    //   this.selectedChat.lastMessage = this.newMessage;
+    //   this.selectedChat.timestamp = new Date();
+    //   this.newMessage = '';
+    //   // Simular respuesta después de un breve retraso
+    //   setTimeout(() => {
+    //     if (this.selectedChat) {
+    //       const response: Message = {
+    //         id: this.selectedChat.messages.length + 1,
+    //         text: '👍 Recibido',
+    //         sender: 'other',
+    //         timestamp: new Date(),
+    //         read: true,
+    //       };
+    //       this.selectedChat.messages.push(response);
+    //       this.selectedChat.lastMessage = response.text;
+    //       this.selectedChat.timestamp = new Date();
+    //     }
+    //   }, 1500);
+    // }
   }
 }

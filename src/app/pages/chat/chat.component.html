@@ -1,14 +1,16 @@
-<ng-container *ngIf="selectedChat; else noChatSelected">
+@let chat = selectedChat();
+
+<ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
     <mat-toolbar class="chat-toolbar">
         <div class="chat-header-avatar">
-            <img [src]="selectedChat.avatar" [alt]="selectedChat.name" class="chat-avatar" />
-            <span class="status-indicator" [class.online]="selectedChat.online"></span>
+            <img [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
+            <span class="status-indicator" [class.online]="chat.online"></span>
         </div>
         <div class="chat-header-info">
-            <span class="chat-name">{{ selectedChat.name }}</span>
+            <span class="chat-name">{{ chat.name }}</span>
             <span class="chat-status">{{
-                selectedChat.online ? 'En línea' : 'Última vez hoy'
+                chat.online ? 'En línea' : 'Última vez hoy'
                 }}</span>
         </div>
         <span class="toolbar-spacer"></span>
@@ -25,7 +27,7 @@
 
     <!-- Mensajes del chat -->
     <div class="message-container">
-        <div *ngFor="let message of selectedChat.messages" [ngClass]="
+        <div *ngFor="let message of chat.messages" [ngClass]="
                   message.sender === 'me'
                     ? 'message-row message-row-right'
                     : 'message-row message-row-left'

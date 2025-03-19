@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 export interface Message {
   id: number;
@@ -25,12 +25,12 @@ export const chatCollection = 'chats';
   providedIn: 'root',
 })
 export class ChatService {
-  chats: Chat[] = [];
-  selectedChat: Chat | null = null;
+  chats = signal<Chat[]>([]);
+  selectedChat = signal<Chat | null>(null);
   newMessage = '';
 
   constructor() {
-    this.chats = [
+    this.chats.set([
       {
         id: 1,
         name: 'Juan Pérez',
@@ -156,19 +156,21 @@ export class ChatService {
           },
         ],
       },
-    ];
+    ]);
   }
 
   selectChat(chat: Chat) {
-    this.selectedChat = chat;
+    // this.selectedChat = chat;
+    // // Marcar mensajes como leídos
+    // if (chat.unread > 0) {
+    //   chat.unread = 0;
+    //   chat.messages.forEach((msg) => {
+    //     if (msg.sender === 'other') {
+    //       msg.read = true;
+    //     }
+    //   });
+    // }
+    this.selectedChat.set(chat);
     // Marcar mensajes como leídos
-    if (chat.unread > 0) {
-      chat.unread = 0;
-      chat.messages.forEach((msg) => {
-        if (msg.sender === 'other') {
-          msg.read = true;
-        }
-      });
-    }
   }
 }

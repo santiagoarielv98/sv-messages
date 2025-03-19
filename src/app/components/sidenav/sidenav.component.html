@@ -1,5 +1,5 @@
 <div class="chat-container">
-    <!-- Barra superior principal -->
+    <!-- NAV -->
     <mat-toolbar color="primary" class="main-toolbar">
         <button mat-icon-button (click)="drawer.toggle()">
             <mat-icon>menu</mat-icon>
@@ -30,7 +30,7 @@
     </mat-toolbar>
 
     <mat-sidenav-container class="sidenav-container">
-        <!-- Panel lateral de chats -->
+        <!-- CHATS -->
         <mat-sidenav #drawer mode="side" opened class="chat-sidenav">
             <mat-toolbar>
                 <span>Conversaciones</span>
@@ -40,10 +40,10 @@
                 </button>
             </mat-toolbar>
 
-            <!-- Lista de chats -->
+            <!-- CHAT-LIST -->
             <mat-nav-list>
-                <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats"
-                    [class.active-chat]="selectedChat?.id === chat.id" (click)="selectChat(chat)">
+                <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats()"
+                    [class.active-chat]="selectedChat()?.id === chat.id" (click)="selectChat(chat)">
                     <div class="chat-list-item">
                         <div class="avatar-container">
                             <img matListItemAvatar [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
@@ -88,7 +88,7 @@
             </mat-nav-list>
         </mat-sidenav>
 
-        <!-- Área principal de chat -->
+        <!-- CONTENT -->
         <mat-sidenav-content class="chat-content">
             <ng-content />
         </mat-sidenav-content>
