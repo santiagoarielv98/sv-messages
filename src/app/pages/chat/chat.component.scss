@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
     flex: 1;
     height: 100%;
@@ -12,6 +14,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    background-color: var(--mat-sys-secondary-container);
 }
 
 .chat-spacer {
@@ -25,6 +28,10 @@
 
 .chat-input {
     width: 100%;
+    @include mat.form-field-overrides((
+        outlined-outline-width: 0,
+        outlined-focus-outline-width: 0,
+    ));
 }
 .message-container{
     display: flex;
@@ -42,4 +49,9 @@
     border-radius: 5px;
     font-size: 14px;
     line-height: 1.5;
+}
+.chat-toolbar{
+    @include mat.toolbar-overrides((
+        container-background-color: var(--mat-sys-surface-container-low),
+      ));
 }

@@ -19,10 +19,10 @@
         }
     </div>
 </div>
-<mat-toolbar color="primary">
-    <mat-form-field appearance="fill" class="chat-input" subscriptSizing="dynamic">
+<mat-toolbar class="chat-toolbar">
+    <mat-form-field appearance="outline" class="chat-input" subscriptSizing="dynamic">
         <input matInput [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message..." />
-        <button mat-icon-button matSuffix (click)="sendMessage()">
+        <button mat-icon-button matSuffix (click)="sendMessage()" [disabled]="!newMessage.trim()">
             <mat-icon>send</mat-icon>
         </button>
     </mat-form-field>
