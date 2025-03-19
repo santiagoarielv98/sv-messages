@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +19,6 @@ import { ChatListComponent } from '../chat-list/chat-list.component';
     MatIconModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatDivider,
     MatBadgeModule,
     MatMenuModule,
     MatButtonModule,

@@ -4,14 +4,6 @@
         <mat-sidenav class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
             [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false"
             class="chat-sidenav">
-            <mat-toolbar>
-                <span>Conversaciones</span>
-                <span class="toolbar-spacer"></span>
-                <button mat-icon-button>
-                    <mat-icon>add</mat-icon>
-                </button>
-            </mat-toolbar>
-
             <!-- CHAT-LIST -->
             <app-chat-list></app-chat-list>
         </mat-sidenav>

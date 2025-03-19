@@ -1,3 +1,11 @@
+<mat-toolbar>
+    <span>Conversaciones</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button>
+        <mat-icon>add</mat-icon>
+    </button>
+</mat-toolbar>
+
 <mat-nav-list>
     <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats()"
         [class.active-chat]="selectedChat()?.id === chat.id" (click)="selectChat(chat)">
