@@ -1,39 +1,9 @@
 <div class="chat-container">
-    <!-- NAV -->
-    <mat-toolbar color="primary" class="main-toolbar">
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span>{{title}}</span>
-        <span class="toolbar-spacer"></span>
-        <button mat-icon-button>
-            <mat-icon>search</mat-icon>
-        </button>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>person</mat-icon>
-                <span>Perfil</span>
-            </button>
-            <button mat-menu-item>
-                <mat-icon>settings</mat-icon>
-                <span>Configuración</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button mat-menu-item>
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Cerrar sesión</span>
-            </button>
-        </mat-menu>
-    </mat-toolbar>
-
     <mat-sidenav-container class="sidenav-container">
         <!-- CHATS -->
-        <mat-sidenav #drawer class="sidenav" fixedInViewport
-            [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
-            [opened]="(isHandset$ | async) === false" class="chat-sidenav">
+        <mat-sidenav class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+            [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false"
+            class="chat-sidenav">
             <mat-toolbar>
                 <span>Conversaciones</span>
                 <span class="toolbar-spacer"></span>
@@ -43,51 +13,7 @@
             </mat-toolbar>
 
             <!-- CHAT-LIST -->
-            <mat-nav-list>
-                <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats()"
-                    [class.active-chat]="selectedChat()?.id === chat.id" (click)="selectChat(chat)">
-                    <div class="chat-list-item">
-                        <div class="avatar-container">
-                            <img matListItemAvatar [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
-                            <span class="status-indicator" [class.online]="chat.online"></span>
-                        </div>
-                        <div class="chat-list-content">
-                            <div class="chat-header">
-                                <span class="chat-name">{{ chat.name }}</span>
-                                <span class="chat-time">{{
-                                    chat.timestamp | date: 'shortTime'
-                                    }}</span>
-                            </div>
-                            <div class="chat-footer">
-                                <span class="chat-preview">{{ chat.lastMessage }}</span>
-                                <span *ngIf="chat.unread > 0" class="unread-badge">
-                                    {{ chat.unread }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <img
-                matListItemAvatar
-                [src]="chat.avatar"
-                [alt]="chat.name"
-                class="chat-avatar"
-              />
-              <div matListItemTitle class="chat-list-content">
-                <div class="chat-header">
-                  <span class="chat-name">{{ chat.name }}</span>
-                  <span class="chat-time">{{
-                    chat.timestamp | date: 'shortTime'
-                  }}</span>
-                </div>
-                <div class="chat-footer">
-                  <span class="chat-preview">{{ chat.lastMessage }}</span>
-                  <span *ngIf="chat.unread > 0" class="unread-badge">
-                    {{ chat.unread }}
-                  </span>
-                </div>
-              </div> -->
-                </mat-list-item>
-            </mat-nav-list>
+            <app-chat-list></app-chat-list>
         </mat-sidenav>
 
         <!-- CONTENT -->

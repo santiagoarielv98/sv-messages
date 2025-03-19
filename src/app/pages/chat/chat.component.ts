@@ -12,6 +12,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChatService } from '../../chat.service';
+import { map, Observable, shareReplay } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ChatListComponent } from '../../components/chat-list/chat-list.component';
 
 @Component({
   selector: 'app-chat',
@@ -29,6 +32,7 @@ import { ChatService } from '../../chat.service';
     MatBadgeModule,
     MatDividerModule,
     MatMenuModule,
+    ChatListComponent,
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
@@ -38,6 +42,14 @@ export class ChatComponent {
   chats = this.chatService.chats;
   selectedChat = this.chatService.selectedChat;
   newMessage = '';
+  private breakpointObserver = inject(BreakpointObserver);
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay(),
+    );
 
   onSubmit() {
     if (!this.newMessage.trim()) {

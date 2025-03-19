@@ -1,15 +1,15 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Chat, ChatService } from '../../chat.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, Observable, shareReplay } from 'rxjs';
+import { ChatListComponent } from '../chat-list/chat-list.component';
 
 @Component({
   selector: 'app-sidenav',
@@ -18,20 +18,17 @@ import { map, Observable, shareReplay } from 'rxjs';
   imports: [
     CommonModule,
     MatIconModule,
-    MatListModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatDivider,
     MatBadgeModule,
     MatMenuModule,
     MatButtonModule,
+    ChatListComponent,
   ],
 })
 export class SidenavComponent {
   title = 'SVChat';
-  private chatService = inject(ChatService);
-  selectedChat = this.chatService.selectedChat;
-  chats = this.chatService.chats;
-  drawer = viewChild.required<MatSidenav>('drawer');
 
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -41,12 +38,4 @@ export class SidenavComponent {
       map((result) => result.matches),
       shareReplay(),
     );
-
-  selectChat(chat: Chat) {
-    this.chatService.selectChat(chat);
-
-    if (this.drawer().mode === 'over') {
-      this.drawer().close();
-    }
-  }
 }
