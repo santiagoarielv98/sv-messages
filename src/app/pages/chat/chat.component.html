@@ -1,14 +1,23 @@
 <div class="chat-container">
-    <span class="chat-top"></span>
     <span class="chat-spacer"></span>
     <div class="chat-messages">
         @for(message of messages$ | async; track message.id) {
-            <div class="message">
-                <p>{{ message.content }}</p>
-            </div>
+        <div class="message-container"
+            [ngClass]="{ 'message-sent': message.sender === 'currentUser', 'message-received': message.sender !== 'currentUser' }">
+            <mat-card class="message">
+                <mat-card-header>
+                    <mat-card-title>{{ message.sender }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>{{ message.content }}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <small class="message-time">{{ message.timestamp | date: 'shortTime' }}</small>
+                </mat-card-actions>
+            </mat-card>
+        </div>
         }
     </div>
-    <span class="chat-bottom"></span>
 </div>
 <mat-toolbar color="primary">
     <mat-form-field appearance="fill" class="chat-input" subscriptSizing="dynamic">

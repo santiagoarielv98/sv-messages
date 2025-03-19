@@ -1,19 +1,21 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Message, MessageService } from '../../message.service';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat',
   imports: [
+    CommonModule,
     AsyncPipe,
     FormsModule,
     MatButtonModule,
@@ -21,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatToolbarModule,
     MatIconModule,
+    MatCardModule,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
@@ -52,6 +55,7 @@ export class ChatComponent implements OnInit {
       };
 
       this.newMessage = '';
+
       await this.messageService.sendMessage(this.chatId, message);
     }
   }

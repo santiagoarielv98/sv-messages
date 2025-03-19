@@ -26,3 +26,21 @@
 .chat-input {
     width: 100%;
 }
+.message-container{
+    display: flex;
+    // justify-content: flex-end;
+}
+.message-container.message-sent {
+    justify-content: flex-end;
+}
+.message-container.message-received {
+    justify-content: flex-start;
+}
+
+.message {
+    max-width: 80%;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+}
