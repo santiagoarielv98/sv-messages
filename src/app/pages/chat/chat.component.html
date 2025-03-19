@@ -1,10 +1,20 @@
-@for (message of messages$ | async; track message.id) {
-    <p>
-        {{ message.content }}
-    </p>
-}
-
-<div class="chat-input">
-    <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message..." />
-    <button (click)="sendMessage()">Send</button>
+<div class="chat-container">
+    <span class="chat-top"></span>
+    <span class="chat-spacer"></span>
+    <div class="chat-messages">
+        @for(message of messages$ | async; track message.id) {
+            <div class="message">
+                <p>{{ message.content }}</p>
+            </div>
+        }
+    </div>
+    <span class="chat-bottom"></span>
 </div>
+<mat-toolbar color="primary">
+    <mat-form-field appearance="fill" class="chat-input" subscriptSizing="dynamic">
+        <input matInput [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message..." />
+        <button mat-icon-button matSuffix (click)="sendMessage()">
+            <mat-icon>send</mat-icon>
+        </button>
+    </mat-form-field>
+</mat-toolbar>

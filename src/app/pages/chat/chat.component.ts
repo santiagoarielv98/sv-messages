@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Message, MessageService } from '../../message.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +19,8 @@ import { Message, MessageService } from '../../message.service';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatToolbarModule,
+    MatIconModule,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
