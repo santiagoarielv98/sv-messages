@@ -27,7 +27,6 @@ export const chatCollection = 'chats';
 export class ChatService {
   chats = signal<Chat[]>([]);
   selectedChat = signal<Chat | null>(null);
-  newMessage = '';
 
   constructor() {
     this.chats.set([
@@ -160,17 +159,45 @@ export class ChatService {
   }
 
   selectChat(chat: Chat) {
-    // this.selectedChat = chat;
-    // // Marcar mensajes como leídos
-    // if (chat.unread > 0) {
-    //   chat.unread = 0;
-    //   chat.messages.forEach((msg) => {
-    //     if (msg.sender === 'other') {
-    //       msg.read = true;
-    //     }
-    //   });
-    // }
+    if (chat.unread > 0) {
+      chat.unread = 0;
+      chat.messages.forEach((msg) => {
+        if (msg.sender === 'other') {
+          msg.read = true;
+        }
+      });
+    }
     this.selectedChat.set(chat);
-    // Marcar mensajes como leídos
+  }
+
+  sendMessage(message: string) {
+    const selectedChat = this.selectedChat();
+    if (selectedChat && message.trim()) {
+      const newMsg: Message = {
+        id: selectedChat.messages.length + 1,
+        text: message,
+        sender: 'me',
+        timestamp: new Date(),
+        read: false,
+      };
+      selectedChat.messages.push(newMsg);
+      selectedChat.lastMessage = message;
+      selectedChat.timestamp = new Date();
+      // Simular respuesta después de un breve retraso
+      setTimeout(() => {
+        if (selectedChat) {
+          const response: Message = {
+            id: selectedChat.messages.length + 1,
+            text: '👍 Recibido',
+            sender: 'other',
+            timestamp: new Date(),
+            read: true,
+          };
+          selectedChat.messages.push(response);
+          selectedChat.lastMessage = response.text;
+          selectedChat.timestamp = new Date();
+        }
+      }, 1500);
+    }
   }
 }

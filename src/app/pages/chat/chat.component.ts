@@ -30,7 +30,6 @@ import { ChatService } from '../../chat.service';
     MatDividerModule,
     MatMenuModule,
   ],
-  // template: ,
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
@@ -40,34 +39,12 @@ export class ChatComponent {
   selectedChat = this.chatService.selectedChat;
   newMessage = '';
 
-  sendMessage() {
-    // if (this.selectedChat && this.newMessage.trim()) {
-    //   const newMsg: Message = {
-    //     id: this.selectedChat().messages.length + 1,
-    //     text: this.newMessage,
-    //     sender: 'me',
-    //     timestamp: new Date(),
-    //     read: false,
-    //   };
-    //   this.selectedChat.messages.push(newMsg);
-    //   this.selectedChat.lastMessage = this.newMessage;
-    //   this.selectedChat.timestamp = new Date();
-    //   this.newMessage = '';
-    //   // Simular respuesta después de un breve retraso
-    //   setTimeout(() => {
-    //     if (this.selectedChat) {
-    //       const response: Message = {
-    //         id: this.selectedChat.messages.length + 1,
-    //         text: '👍 Recibido',
-    //         sender: 'other',
-    //         timestamp: new Date(),
-    //         read: true,
-    //       };
-    //       this.selectedChat.messages.push(response);
-    //       this.selectedChat.lastMessage = response.text;
-    //       this.selectedChat.timestamp = new Date();
-    //     }
-    //   }, 1500);
-    // }
+  onSubmit() {
+    if (!this.newMessage.trim()) {
+      return;
+    }
+
+    this.chatService.sendMessage(this.newMessage);
+    this.newMessage = '';
   }
 }
