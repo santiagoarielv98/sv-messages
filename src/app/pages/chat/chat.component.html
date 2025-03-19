@@ -5,15 +5,15 @@
         <div class="message-container"
             [ngClass]="{ 'message-sent': message.sender === 'currentUser', 'message-received': message.sender !== 'currentUser' }">
             <mat-card class="message">
-                <mat-card-header>
+                <mat-card-header class="message-header" *ngIf="message.sender !== 'currentUser'">
                     <mat-card-title>{{ message.sender }}</mat-card-title>
                 </mat-card-header>
-                <mat-card-content>
+                <mat-card-content class="message-content">
                     <p>{{ message.content }}</p>
                 </mat-card-content>
-                <mat-card-actions>
+                <mat-card-footer class="message-footer">
                     <small class="message-time">{{ message.timestamp | date: 'shortTime' }}</small>
-                </mat-card-actions>
+                </mat-card-footer>
             </mat-card>
         </div>
         }
