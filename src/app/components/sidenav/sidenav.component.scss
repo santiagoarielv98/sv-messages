@@ -1,19 +1,18 @@
 .sidenav-container {
   height: 100%;
-  background-color: #f9f9f9;
 }
 
 .sidenav {
   width: 25rem;
   border-radius: 0;
-  // box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
   border-right: none;
   background-color: var(--mat-sys-surface);
 }
 
 .mat-toolbar {
   background: var(--mat-sys-primary);
-  color: white;
+  color: var(--mat-sys-surface);
   height: 64px;
   display: flex;
   align-items: center;
@@ -38,7 +37,6 @@
 .sidenav-content {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
 }
 
 /* Chat list styling */
@@ -47,22 +45,18 @@
   transition: background-color 0.2s ease;
 }
 
-.chat-link:hover {
-  background-color: #eaf1ff;
-}
-
-.chat-link[ng-reflect-activated="true"] {
-  background-color: #d3e4ff;
-  border-left: 4px solid var(--mat-sys-primary);
-}
-
 .chat-link mat-icon {
   color: var(--mat-sys-primary);
+}
+.chat-icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Button styling */
 button[mat-icon-button] {
-  color: white;
+  color: var(--mat-sys-surface);
 }
 
 button[mat-icon-button]:hover {

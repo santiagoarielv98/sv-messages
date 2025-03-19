@@ -1,11 +1,13 @@
+@let messages = messages$ | async;
+
 <div class="chat-container">
     <span class="chat-spacer"></span>
     <div class="chat-messages">
-        @for(message of messages$ | async; track message.id) {
+        @for(message of messages; track message.id; let i = $index) {
         <div class="message-container"
             [ngClass]="{ 'message-sent': message.sender === 'currentUser', 'message-received': message.sender !== 'currentUser' }">
             <mat-card class="message">
-                <mat-card-header class="message-header" *ngIf="message.sender !== 'currentUser'">
+                <mat-card-header class="message-header" *ngIf="message.sender !== 'currentUser' && (i === 0 || (messages)![i-1].sender !== message.sender)">
                     <mat-card-title>{{ message.sender }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content class="message-content">

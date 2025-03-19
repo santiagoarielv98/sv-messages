@@ -49,7 +49,7 @@ export class ChatComponent implements OnInit {
   async sendMessage(): Promise<void> {
     if (this.newMessage.trim() && this.chatId) {
       const message = {
-        sender: 'currentUser', // In a real app, get this from authentication
+        sender: 'dos', // In a real app, get this from authentication
         content: this.newMessage,
         timestamp: Date.now(),
       };

@@ -13,7 +13,9 @@
     <mat-nav-list>
       @for (chat of chats$ | async; track chat.id) {
         <mat-list-item [routerLink]="['/chat', chat.id]" class="chat-link" [activated]="isRouteActive(chat.id)">
-              <mat-icon matListItemIcon>account_circle</mat-icon>
+              <div matListItemAvatar class="chat-icon">
+                <mat-icon class="material-symbols-outlined">chat</mat-icon>
+              </div>
               <div matListItemTitle>{{ chat.name || 'Chat ' + chat.id }}</div>
               <div matListItemLine>Tap to view messages</div>
         </mat-list-item>
