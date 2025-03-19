@@ -1,170 +1,74 @@
-<div class="chat-container">
-    <!-- Barra superior principal -->
-    <mat-toolbar color="primary" class="main-toolbar">
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span>Chat App</span>
+<ng-container *ngIf="selectedChat; else noChatSelected">
+    <!-- Barra superior del chat activo -->
+    <mat-toolbar class="chat-toolbar">
+        <div class="chat-header-avatar">
+            <img [src]="selectedChat.avatar" [alt]="selectedChat.name" class="chat-avatar" />
+            <span class="status-indicator" [class.online]="selectedChat.online"></span>
+        </div>
+        <div class="chat-header-info">
+            <span class="chat-name">{{ selectedChat.name }}</span>
+            <span class="chat-status">{{
+                selectedChat.online ? 'En línea' : 'Última vez hoy'
+                }}</span>
+        </div>
         <span class="toolbar-spacer"></span>
         <button mat-icon-button>
-            <mat-icon>search</mat-icon>
+            <mat-icon>phone</mat-icon>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <button mat-icon-button>
+            <mat-icon>videocam</mat-icon>
+        </button>
+        <button mat-icon-button>
             <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>person</mat-icon>
-                <span>Perfil</span>
-            </button>
-            <button mat-menu-item>
-                <mat-icon>settings</mat-icon>
-                <span>Configuración</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button mat-menu-item>
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Cerrar sesión</span>
-            </button>
-        </mat-menu>
     </mat-toolbar>
 
-    <mat-sidenav-container class="sidenav-container">
-        <!-- Panel lateral de chats -->
-        <mat-sidenav #drawer mode="side" opened class="chat-sidenav">
-            <mat-toolbar>
-                <span>Conversaciones</span>
-                <span class="toolbar-spacer"></span>
-                <button mat-icon-button>
-                    <mat-icon>edit</mat-icon>
-                </button>
-            </mat-toolbar>
-
-            <!-- Lista de chats -->
-            <mat-nav-list>
-                <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats"
-                    [class.active-chat]="selectedChat?.id === chat.id" (click)="selectChat(chat)">
-                    <div class="chat-list-item">
-                        <div class="avatar-container">
-                            <img matListItemAvatar [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
-                            <span class="status-indicator" [class.online]="chat.online"></span>
-                        </div>
-                        <div class="chat-list-content">
-                            <div class="chat-header">
-                                <span class="chat-name">{{ chat.name }}</span>
-                                <span class="chat-time">{{
-                                    chat.timestamp | date: 'shortTime'
-                                    }}</span>
-                            </div>
-                            <div class="chat-footer">
-                                <span class="chat-preview">{{ chat.lastMessage }}</span>
-                                <span *ngIf="chat.unread > 0" class="unread-badge">
-                                    {{ chat.unread }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <img
-                matListItemAvatar
-                [src]="chat.avatar"
-                [alt]="chat.name"
-                class="chat-avatar"
-              />
-              <div matListItemTitle class="chat-list-content">
-                <div class="chat-header">
-                  <span class="chat-name">{{ chat.name }}</span>
-                  <span class="chat-time">{{
-                    chat.timestamp | date: 'shortTime'
-                  }}</span>
-                </div>
-                <div class="chat-footer">
-                  <span class="chat-preview">{{ chat.lastMessage }}</span>
-                  <span *ngIf="chat.unread > 0" class="unread-badge">
-                    {{ chat.unread }}
-                  </span>
-                </div>
-              </div> -->
-                </mat-list-item>
-            </mat-nav-list>
-        </mat-sidenav>
-
-        <!-- Área principal de chat -->
-        <mat-sidenav-content class="chat-content">
-            <ng-container *ngIf="selectedChat; else noChatSelected">
-                <!-- Barra superior del chat activo -->
-                <mat-toolbar class="chat-toolbar">
-                    <div class="chat-header-avatar">
-                        <img [src]="selectedChat.avatar" [alt]="selectedChat.name" class="chat-avatar" />
-                        <span class="status-indicator" [class.online]="selectedChat.online"></span>
-                    </div>
-                    <div class="chat-header-info">
-                        <span class="chat-name">{{ selectedChat.name }}</span>
-                        <span class="chat-status">{{
-                            selectedChat.online ? 'En línea' : 'Última vez hoy'
-                            }}</span>
-                    </div>
-                    <span class="toolbar-spacer"></span>
-                    <button mat-icon-button>
-                        <mat-icon>phone</mat-icon>
-                    </button>
-                    <button mat-icon-button>
-                        <mat-icon>videocam</mat-icon>
-                    </button>
-                    <button mat-icon-button>
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                </mat-toolbar>
-
-                <!-- Mensajes del chat -->
-                <div class="message-container">
-                    <div *ngFor="let message of selectedChat.messages" [ngClass]="
+    <!-- Mensajes del chat -->
+    <div class="message-container">
+        <div *ngFor="let message of selectedChat.messages" [ngClass]="
                   message.sender === 'me'
                     ? 'message-row message-row-right'
                     : 'message-row message-row-left'
                 ">
-                        <div class="message-bubble" [class.message-mine]="message.sender === 'me'"
-                            [class.message-other]="message.sender === 'other'">
-                            <div class="message-text">{{ message.text }}</div>
-                            <div class="message-info">
-                                <span class="message-time">{{
-                                    message.timestamp | date: 'shortTime'
-                                    }}</span>
-                                <span *ngIf="message.sender === 'me'" class="message-status">
-                                    <mat-icon [class.read]="message.read">{{
-                                        message.read ? 'done_all' : 'done'
-                                        }}</mat-icon>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="message-bubble" [class.message-mine]="message.sender === 'me'"
+                [class.message-other]="message.sender === 'other'">
+                <div class="message-text">{{ message.text }}</div>
+                <div class="message-info">
+                    <span class="message-time">{{
+                        message.timestamp | date: 'shortTime'
+                        }}</span>
+                    <span *ngIf="message.sender === 'me'" class="message-status">
+                        <mat-icon [class.read]="message.read">{{
+                            message.read ? 'done_all' : 'done'
+                            }}</mat-icon>
+                    </span>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Barra de entrada de mensajes -->
-                <div class="input-container">
-                    <button mat-icon-button>
-                        <mat-icon>sentiment_satisfied_alt</mat-icon>
-                    </button>
-                    <button mat-icon-button>
-                        <mat-icon>attach_file</mat-icon>
-                    </button>
-                    <mat-form-field appearance="outline" class="message-input" subscriptSizing="dynamic">
-                        <input matInput placeholder="Escribe un mensaje" [(ngModel)]="newMessage" />
-                    </mat-form-field>
-                    <button mat-mini-fab color="secondary" class="send-button" (click)="sendMessage()"
-                        [disabled]="!newMessage">
-                        <mat-icon>send</mat-icon>
-                    </button>
-                </div>
-            </ng-container>
+    <!-- Barra de entrada de mensajes -->
+    <div class="input-container">
+        <button mat-icon-button>
+            <mat-icon>sentiment_satisfied_alt</mat-icon>
+        </button>
+        <button mat-icon-button>
+            <mat-icon>attach_file</mat-icon>
+        </button>
+        <mat-form-field appearance="outline" class="message-input" subscriptSizing="dynamic">
+            <input matInput placeholder="Escribe un mensaje" [(ngModel)]="newMessage" />
+        </mat-form-field>
+        <button mat-mini-fab color="secondary" class="send-button" (click)="sendMessage()" [disabled]="!newMessage">
+            <mat-icon>send</mat-icon>
+        </button>
+    </div>
+</ng-container>
 
-            <!-- Pantalla cuando no hay chat seleccionado -->
-            <ng-template #noChatSelected>
-                <div class="no-chat-selected">
-                    <mat-icon class="no-chat-icon">chat</mat-icon>
-                    <h2>Selecciona un chat para comenzar</h2>
-                    <p>Elige una conversación de la lista para ver los mensajes</p>
-                </div>
-            </ng-template>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-</div>
+<!-- Pantalla cuando no hay chat seleccionado -->
+<ng-template #noChatSelected>
+    <div class="no-chat-selected">
+        <mat-icon class="no-chat-icon">chat</mat-icon>
+        <h2>Selecciona un chat para comenzar</h2>
+        <p>Elige una conversación de la lista para ver los mensajes</p>
+    </div>
+</ng-template>
