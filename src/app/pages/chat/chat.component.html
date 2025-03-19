@@ -3,6 +3,9 @@
 <ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
     <mat-toolbar class="chat-toolbar">
+        <button mat-icon-button class="back-button" (click)="onBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
         <div class="chat-header-avatar">
             <img [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
             <span class="status-indicator" [class.online]="chat.online"></span>
@@ -75,7 +78,7 @@
     }@else{
     <mat-toolbar color="primary" class="main-toolbar">
         <span class="toolbar-spacer"></span>
-        <button mat-icon-button>
+        <button mat-icon-button *ngIf="chat">
             <mat-icon>search</mat-icon>
         </button>
         <button mat-icon-button [matMenuTriggerFor]="menu">

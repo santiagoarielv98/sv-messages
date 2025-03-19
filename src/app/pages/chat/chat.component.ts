@@ -59,4 +59,8 @@ export class ChatComponent {
     this.chatService.sendMessage(this.newMessage);
     this.newMessage = '';
   }
+
+  onBack() {
+    this.chatService.selectedChat.set(null);
+  }
 }
