@@ -8,11 +8,11 @@
   border-radius: 0;
   // box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
   border-right: none;
-  background-color: #ffffff;
+  background-color: var(--mat-sys-surface);
 }
 
 .mat-toolbar {
-  background: #0060a8;
+  background: var(--mat-sys-primary);
   color: white;
   height: 64px;
   display: flex;
@@ -53,19 +53,11 @@
 
 .chat-link[ng-reflect-activated="true"] {
   background-color: #d3e4ff;
-  border-left: 4px solid #0060a8;
+  border-left: 4px solid var(--mat-sys-primary);
 }
 
 .chat-link mat-icon {
-  color: #0060a8;
-}
-
-/* Empty state styling */
-.no-chats {
-  padding: 30px 16px;
-  text-align: center;
-  color: #767777;
-  font-style: italic;
+  color: var(--mat-sys-primary);
 }
 
 /* Button styling */

@@ -17,3 +17,11 @@ html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Empty state styling */
+.no-chats {
+  padding: 30px 16px;
+  text-align: center;
+  color: var(--mat-sys-outline);
+  font-style: italic;
+}
