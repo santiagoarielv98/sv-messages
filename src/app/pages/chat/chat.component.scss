@@ -11,7 +11,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .chat-spacer {
@@ -28,7 +28,6 @@
 }
 .message-container{
     display: flex;
-    // justify-content: flex-end;
 }
 .message-container.message-sent {
     justify-content: flex-end;
