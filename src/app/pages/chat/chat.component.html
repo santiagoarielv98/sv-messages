@@ -1,4 +1,5 @@
-@let chat = selectedChat();
+@let chat = selectedChat$ | async;
+@let messages = messages$ | async;
 
 <ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
@@ -26,8 +27,8 @@
     </mat-toolbar>
 
     <!-- Mensajes del chat -->
-    <!-- <div class="message-container">
-        <div *ngFor="let message of chat.messages" [ngClass]="
+    <div class="message-container">
+        <div *ngFor="let message of messages" [ngClass]="
                   message.sender === 'me'
                     ? 'message-row message-row-right'
                     : 'message-row message-row-left'
@@ -47,7 +48,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Barra de entrada de mensajes -->
     <div class="input-container">

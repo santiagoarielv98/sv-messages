@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -20,6 +20,7 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
   selector: 'app-chat',
   standalone: true,
   imports: [
+    AsyncPipe,
     CommonModule,
     FormsModule,
     MatButtonModule,
@@ -39,8 +40,8 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
 })
 export class ChatComponent {
   private chatService = inject(ChatService);
-  chats = this.chatService.chats;
-  selectedChat = this.chatService.selectedChat;
+  selectedChat$ = this.chatService.selectedChat$;
+  messages$ = this.chatService.messages$;
   newMessage = '';
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -61,6 +62,6 @@ export class ChatComponent {
   }
 
   onBack() {
-    this.chatService.selectedChat.set(null);
+    this.chatService.selectedChat$.next(null);
   }
 }

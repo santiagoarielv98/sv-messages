@@ -1,19 +1,36 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   collection,
   collectionData,
   doc,
   Firestore,
+  orderBy,
+  query,
   setDoc,
   Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 
 export interface Message {
   id: number;
   text: string;
   sender: 'me' | 'other';
   timestamp: Date;
+  read: boolean;
+}
+
+export interface MessageFirestore {
+  id: number;
+  text: string;
+  sender: 'me' | 'other';
+  timestamp: Timestamp;
   read: boolean;
 }
 
@@ -45,19 +62,61 @@ export const messageCollection = 'messages';
   providedIn: 'root',
 })
 export class ChatService {
-  chats = signal<Chat[]>([]);
-  messages = signal<Message[]>([]);
-  selectedChat = signal<Chat | null>(null);
-
   firestore = inject(Firestore);
   chatCollection = collection(this.firestore, chatCollection);
   messageCollection = collection(this.firestore, messageCollection);
+
   chats$ = collectionData(this.chatCollection, {
     idField: 'id',
-  }) as Observable<ChatFirestore[]>;
-  selectedChat$ = new Subject<Chat | null>();
+  }).pipe(
+    map((chats) =>
+      (chats as ChatFirestore[]).map((chat) => ({
+        ...chat,
+        timestamp: chat.timestamp.toDate(),
+      })),
+    ),
+  ) as Observable<Chat[]>;
+  selectedChat$ = new BehaviorSubject<Chat | null>(null);
+  messages$ = this.selectedChat$.pipe(
+    distinctUntilChanged(),
+    switchMap((chatId) => {
+      if (!chatId) {
+        return of([]);
+      }
+
+      const messagesRef = collection(
+        this.firestore,
+        chatCollection,
+        chatId.id,
+        messageCollection,
+      );
+
+      return collectionData(query(messagesRef, orderBy('timestamp', 'asc')), {
+        idField: 'id',
+      });
+    }),
+    map((messages) =>
+      (messages as MessageFirestore[]).map((message) => ({
+        ...message,
+        timestamp: message.timestamp.toDate(),
+      })),
+    ),
+  );
 
   constructor() {
+    this.initExampleChat();
+  }
+
+  selectChat(chat: Chat) {
+    this.selectedChat$.next(chat);
+  }
+
+  sendMessage(message: string) {
+    // const selectedChat = this.selectedChat();
+    console.log('selectedChat', message);
+  }
+
+  initExampleChat() {
     const example = doc(this.firestore, chatCollection, 'example');
 
     setDoc(
@@ -85,78 +144,5 @@ export class ChatService {
         { merge: true },
       );
     });
-
-    this.chats$.subscribe((chats) => {
-      this.chats.set(
-        chats.map(
-          (chat): Chat => ({
-            ...chat,
-            timestamp: chat.timestamp.toDate(),
-          }),
-        ),
-      );
-    });
-
-    this.selectedChat$.subscribe((chat) => {
-      this.selectedChat.set(chat);
-      if (chat) {
-        const chatId = chat.id;
-        const messagesCollection = collection(
-          this.firestore,
-          chatCollection,
-          chatId,
-          messageCollection,
-        );
-        collectionData(messagesCollection, { idField: 'id' }).subscribe(
-          (messages) => {
-            this.messages.set(
-              messages.map((message: any) => ({
-                ...message,
-                timestamp: message.timestamp.toDate(),
-              })),
-            );
-          },
-        );
-      } else {
-        this.messages.set([]);
-      }
-    });
-  }
-
-  selectChat(chat: Chat) {
-    this.selectedChat$.next(chat);
-    // this.selectedChat.set(chat);
-  }
-
-  sendMessage(message: string) {
-    const selectedChat = this.selectedChat();
-    console.log('selectedChat', selectedChat, message);
-    // if (selectedChat && message.trim()) {
-    //   const newMsg: Message = {
-    //     id: selectedChat.messages.length + 1,
-    //     text: message,
-    //     sender: 'me',
-    //     timestamp: new Date(),
-    //     read: false,
-    //   };
-    //   selectedChat.messages.push(newMsg);
-    //   selectedChat.lastMessage = message;
-    //   selectedChat.timestamp = new Date();
-    //   // Simular respuesta después de un breve retraso
-    //   setTimeout(() => {
-    //     if (selectedChat) {
-    //       const response: Message = {
-    //         id: selectedChat.messages.length + 1,
-    //         text: '👍 Recibido',
-    //         sender: 'other',
-    //         timestamp: new Date(),
-    //         read: true,
-    //       };
-    //       selectedChat.messages.push(response);
-    //       selectedChat.lastMessage = response.text;
-    //       selectedChat.timestamp = new Date();
-    //     }
-    //   }, 1500);
-    // }
   }
 }

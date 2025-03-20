@@ -7,8 +7,8 @@
 </mat-toolbar>
 
 <mat-nav-list>
-    <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats()"
-        [class.active-chat]="selectedChat()?.id === chat.id" (click)="selectChat(chat)">
+    <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats$ | async"
+        [class.active-chat]="(selectedChatId$ | async) === chat.id" (click)="selectChat(chat)">
         <div class="chat-list-item">
             <div class="avatar-container">
                 <img matListItemAvatar [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
