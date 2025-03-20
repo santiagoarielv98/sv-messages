@@ -42,7 +42,6 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
 export class ChatComponent {
   private chatService = inject(ChatService);
   authService = inject(AuthService);
-  user$ = this.authService.user$;
 
   selectedChat$ = this.chatService.selectedChat$;
   messages$ = this.chatService.messages$;
@@ -75,5 +74,9 @@ export class ChatComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  get currentUser() {
+    return this.authService.currentUser;
   }
 }

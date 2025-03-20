@@ -1,6 +1,7 @@
 @let chat = selectedChat$ | async;
 @let messages = messages$ | async;
-@let user = user$ | async;
+@let user = currentUser;
+@let userId = user?.id;
 
 <ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
@@ -8,6 +9,7 @@
         <button mat-icon-button class="back-button" (click)="onBack()">
             <mat-icon>arrow_back</mat-icon>
         </button>
+
         <div class="chat-header-avatar">
             <img src="https://avatar.iran.liara.run/public/12" [alt]="chat.name" class="chat-avatar" />
             <!-- <span class="status-indicator" [class.online]="chat.online"></span> -->
@@ -29,26 +31,20 @@
 
     <!-- Mensajes del chat -->
     <div class="message-container">
-        <div *ngFor="let message of messages" [ngClass]="
-                  message.sender === 'me'
-                    ? 'message-row message-row-right'
-                    : 'message-row message-row-left'
-                ">
-            <div class="message-bubble" [class.message-mine]="message.sender === 'me'"
-                [class.message-other]="message.sender === 'other'">
+        @for(message of messages;track message.id) {
+        @let isMine = message.sender === userId;
+        <div [ngClass]="isMine ? 'message-row message-row-right' : 'message-row message-row-left'">
+            <div class="message-bubble" [class.message-mine]="isMine" [class.message-other]="!isMine">
                 <div class="message-text">{{ message.text }}</div>
                 <div class="message-info">
-                    <span class="message-time">{{
-                        message.timestamp | date: 'shortTime'
-                        }}</span>
-                    <span *ngIf="message.sender === 'me'" class="message-status">
-                        <mat-icon [class.read]="message.read">{{
-                            message.read ? 'done_all' : 'done'
-                            }}</mat-icon>
+                    <span class="message-time">{{ message.timestamp | date: 'shortTime' }}</span>
+                    <span *ngIf="isMine" class="message-status">
+                        <mat-icon [class.read]="message.read">{{ message.read ? 'done_all' : 'done' }}</mat-icon>
                     </span>
                 </div>
             </div>
         </div>
+        }
     </div>
 
     <!-- Barra de entrada de mensajes -->
