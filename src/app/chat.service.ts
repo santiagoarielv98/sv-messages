@@ -1,4 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import {
+  collection,
+  collectionData,
+  doc,
+  Firestore,
+  setDoc,
+  Timestamp,
+} from '@angular/fire/firestore';
+import { Observable, Subject } from 'rxjs';
 
 export interface Message {
   id: number;
@@ -9,195 +18,145 @@ export interface Message {
 }
 
 export interface Chat {
-  id: number;
+  id: string;
   name: string;
   avatar: string;
   lastMessage: string;
   timestamp: Date;
   unread: number;
-  messages: Message[];
+  // messages: Message[];
+  online: boolean;
+}
+
+export interface ChatFirestore {
+  id: string;
+  name: string;
+  avatar: string;
+  lastMessage: string;
+  timestamp: Timestamp;
+  unread: number;
   online: boolean;
 }
 
 export const chatCollection = 'chats';
+export const messageCollection = 'messages';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   chats = signal<Chat[]>([]);
+  messages = signal<Message[]>([]);
   selectedChat = signal<Chat | null>(null);
 
+  firestore = inject(Firestore);
+  chatCollection = collection(this.firestore, chatCollection);
+  messageCollection = collection(this.firestore, messageCollection);
+  chats$ = collectionData(this.chatCollection, {
+    idField: 'id',
+  }) as Observable<ChatFirestore[]>;
+  selectedChat$ = new Subject<Chat | null>();
+
   constructor() {
-    this.chats.set([
+    const example = doc(this.firestore, chatCollection, 'example');
+
+    setDoc(
+      example,
       {
-        id: 1,
         name: 'Juan Pérez',
         avatar: 'https://i.pravatar.cc/150?img=1',
         lastMessage: 'Hola, ¿cómo estás?',
         timestamp: new Date('2025-03-19T10:30:00'),
         unread: 2,
         online: true,
-        messages: [
-          {
-            id: 1,
-            text: 'Hola, ¿cómo estás?',
-            sender: 'other',
-            timestamp: new Date('2025-03-19T10:30:00'),
-            read: true,
-          },
-          {
-            id: 2,
-            text: '¡Muy bien! ¿Y tú?',
-            sender: 'me',
-            timestamp: new Date('2025-03-19T10:32:00'),
-            read: true,
-          },
-          {
-            id: 3,
-            text: 'Todo perfecto, gracias por preguntar. Oye, ¿podemos vernos esta tarde?',
-            sender: 'other',
-            timestamp: new Date('2025-03-19T10:33:00'),
-            read: true,
-          },
-        ],
+        // messages: []
       },
-      {
-        id: 2,
-        name: 'María García',
-        avatar: 'https://i.pravatar.cc/150?img=5',
-        lastMessage: '¿Viste el último episodio?',
-        timestamp: new Date('2025-03-19T09:15:00'),
-        unread: 0,
-        online: false,
-        messages: [
-          {
-            id: 1,
-            text: '¿Viste el último episodio?',
-            sender: 'other',
-            timestamp: new Date('2025-03-19T09:15:00'),
-            read: true,
+      { merge: true },
+    ).then(() => {
+      setDoc(
+        doc(this.firestore, chatCollection, 'example', 'messages', '1'),
+        {
+          id: 1,
+          text: 'Hola, ¿cómo estás?',
+          sender: 'other',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: true,
+        },
+        { merge: true },
+      );
+    });
+
+    this.chats$.subscribe((chats) => {
+      this.chats.set(
+        chats.map(
+          (chat): Chat => ({
+            ...chat,
+            timestamp: chat.timestamp.toDate(),
+          }),
+        ),
+      );
+    });
+
+    this.selectedChat$.subscribe((chat) => {
+      this.selectedChat.set(chat);
+      if (chat) {
+        const chatId = chat.id;
+        const messagesCollection = collection(
+          this.firestore,
+          chatCollection,
+          chatId,
+          messageCollection,
+        );
+        collectionData(messagesCollection, { idField: 'id' }).subscribe(
+          (messages) => {
+            this.messages.set(
+              messages.map((message: any) => ({
+                ...message,
+                timestamp: message.timestamp.toDate(),
+              })),
+            );
           },
-        ],
-      },
-      {
-        id: 3,
-        name: 'Grupo Familia',
-        avatar: 'https://i.pravatar.cc/150?img=3',
-        lastMessage: 'Papá: ¿A qué hora es la cena?',
-        timestamp: new Date('2025-03-18T21:45:00'),
-        unread: 5,
-        online: false,
-        messages: [
-          {
-            id: 1,
-            text: '¿A qué hora es la cena?',
-            sender: 'other',
-            timestamp: new Date('2025-03-18T21:45:00'),
-            read: false,
-          },
-        ],
-      },
-      {
-        id: 4,
-        name: 'Carlos Rodríguez',
-        avatar: 'https://i.pravatar.cc/150?img=8',
-        lastMessage: 'Te envío el archivo mañana',
-        timestamp: new Date('2025-03-18T18:20:00'),
-        unread: 0,
-        online: true,
-        messages: [
-          {
-            id: 1,
-            text: 'Necesito el informe para mañana',
-            sender: 'other',
-            timestamp: new Date('2025-03-18T18:15:00'),
-            read: true,
-          },
-          {
-            id: 2,
-            text: 'Te envío el archivo mañana',
-            sender: 'me',
-            timestamp: new Date('2025-03-18T18:20:00'),
-            read: true,
-          },
-        ],
-      },
-      {
-        id: 5,
-        name: 'Laura Martínez',
-        avatar: 'https://i.pravatar.cc/150?img=9',
-        lastMessage: 'Gracias por la ayuda',
-        timestamp: new Date('2025-03-17T14:30:00'),
-        unread: 0,
-        online: false,
-        messages: [
-          {
-            id: 1,
-            text: '¿Me puedes ayudar con esto?',
-            sender: 'other',
-            timestamp: new Date('2025-03-17T14:25:00'),
-            read: true,
-          },
-          {
-            id: 2,
-            text: 'Claro, dime qué necesitas',
-            sender: 'me',
-            timestamp: new Date('2025-03-17T14:28:00'),
-            read: true,
-          },
-          {
-            id: 3,
-            text: 'Gracias por la ayuda',
-            sender: 'other',
-            timestamp: new Date('2025-03-17T14:30:00'),
-            read: true,
-          },
-        ],
-      },
-    ]);
+        );
+      } else {
+        this.messages.set([]);
+      }
+    });
   }
 
   selectChat(chat: Chat) {
-    if (chat.unread > 0) {
-      chat.unread = 0;
-      chat.messages.forEach((msg) => {
-        if (msg.sender === 'other') {
-          msg.read = true;
-        }
-      });
-    }
-    this.selectedChat.set(chat);
+    this.selectedChat$.next(chat);
+    // this.selectedChat.set(chat);
   }
 
   sendMessage(message: string) {
     const selectedChat = this.selectedChat();
-    if (selectedChat && message.trim()) {
-      const newMsg: Message = {
-        id: selectedChat.messages.length + 1,
-        text: message,
-        sender: 'me',
-        timestamp: new Date(),
-        read: false,
-      };
-      selectedChat.messages.push(newMsg);
-      selectedChat.lastMessage = message;
-      selectedChat.timestamp = new Date();
-      // Simular respuesta después de un breve retraso
-      setTimeout(() => {
-        if (selectedChat) {
-          const response: Message = {
-            id: selectedChat.messages.length + 1,
-            text: '👍 Recibido',
-            sender: 'other',
-            timestamp: new Date(),
-            read: true,
-          };
-          selectedChat.messages.push(response);
-          selectedChat.lastMessage = response.text;
-          selectedChat.timestamp = new Date();
-        }
-      }, 1500);
-    }
+    console.log('selectedChat', selectedChat, message);
+    // if (selectedChat && message.trim()) {
+    //   const newMsg: Message = {
+    //     id: selectedChat.messages.length + 1,
+    //     text: message,
+    //     sender: 'me',
+    //     timestamp: new Date(),
+    //     read: false,
+    //   };
+    //   selectedChat.messages.push(newMsg);
+    //   selectedChat.lastMessage = message;
+    //   selectedChat.timestamp = new Date();
+    //   // Simular respuesta después de un breve retraso
+    //   setTimeout(() => {
+    //     if (selectedChat) {
+    //       const response: Message = {
+    //         id: selectedChat.messages.length + 1,
+    //         text: '👍 Recibido',
+    //         sender: 'other',
+    //         timestamp: new Date(),
+    //         read: true,
+    //       };
+    //       selectedChat.messages.push(response);
+    //       selectedChat.lastMessage = response.text;
+    //       selectedChat.timestamp = new Date();
+    //     }
+    //   }, 1500);
+    // }
   }
 }
