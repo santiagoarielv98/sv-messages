@@ -10,6 +10,9 @@ import {
   ChatDialogData,
   CreateChatDialogComponent,
 } from '../create-chat-dialog/create-chat-dialog.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map, Observable, shareReplay } from 'rxjs';
+import { LogoComponent } from '../logo/logo.component';
 
 @Component({
   selector: 'app-chat-list',
@@ -20,11 +23,21 @@ import {
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    LogoComponent,
   ],
   templateUrl: './chat-list.component.html',
   styleUrl: './chat-list.component.scss',
 })
 export class ChatListComponent {
+  private breakpointObserver = inject(BreakpointObserver);
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay(),
+    );
+
   private chatService = inject(ChatService);
   readonly dialog = inject(MatDialog);
 

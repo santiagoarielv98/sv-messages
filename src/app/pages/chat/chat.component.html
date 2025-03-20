@@ -2,6 +2,7 @@
 @let messages = messages$ | async;
 @let user = currentUser;
 @let userId = user?.id;
+@let isHandset = isHandset$ | async;
 
 <ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
@@ -69,33 +70,18 @@
 
 <!-- Pantalla cuando no hay chat seleccionado -->
 <ng-template #noChatSelected>
-    @if(isHandset$ | async) {
-    <app-chat-list />
-    }@else{
     <mat-toolbar color="primary" class="main-toolbar">
+        <ng-container *ngIf="isHandset">
+            <app-logo />
+        </ng-container>
         <span class="toolbar-spacer"></span>
         <button mat-icon-button *ngIf="chat">
             <mat-icon>search</mat-icon>
         </button>
         @if(user){
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
+        <button mat-icon-button (click)="logout()">
+            <mat-icon>logout</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>person</mat-icon>
-                <span>Perfil</span>
-            </button>
-            <button mat-menu-item>
-                <mat-icon>settings</mat-icon>
-                <span>Configuración</span>
-            </button>
-            <mat-divider></mat-divider>
-            <button mat-menu-item (click)="logout()">
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Cerrar sesión</span>
-            </button>
-        </mat-menu>
         } @else {
         <!-- iniciar session con google -->
         <button mat-icon-button (click)="loginWithGoogle()">
@@ -103,6 +89,10 @@
         </button>
         }
     </mat-toolbar>
+    @if(isHandset) {
+    <app-chat-list />
+    }@else{
+
     <div class="no-chat-selected">
         <mat-icon class="no-chat-icon">chat</mat-icon>
         <h2>Selecciona un chat para comenzar</h2>

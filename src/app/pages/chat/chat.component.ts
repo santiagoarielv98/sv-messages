@@ -22,6 +22,7 @@ import { map, Observable, shareReplay, Subscription, tap } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { ChatService } from '../../chat.service';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
+import { LogoComponent } from '../../components/logo/logo.component';
 
 @Component({
   selector: 'app-chat',
@@ -41,6 +42,7 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
     MatDividerModule,
     MatMenuModule,
     ChatListComponent,
+    LogoComponent,
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],

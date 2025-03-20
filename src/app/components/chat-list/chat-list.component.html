@@ -1,5 +1,12 @@
 @let selectedChat = selectedChat$ | async;
 @let selectedChatId = selectedChat?.id;
+@let isHandset = isHandset$ | async;
+
+<ng-container *ngIf="!isHandset">
+    <mat-toolbar>
+        <app-logo></app-logo>
+    </mat-toolbar>
+</ng-container>
 
 <mat-toolbar>
     <span>Conversaciones</span>
@@ -14,7 +21,8 @@
         [class.active-chat]="selectedChatId === chat.id" (click)="selectChat(chat)">
         <div class="chat-list-item">
             <div class="avatar-container">
-                <img matListItemAvatar src="https://avatar.iran.liara.run/public/12" [alt]="chat.name" class="chat-avatar" />
+                <img matListItemAvatar src="https://avatar.iran.liara.run/public/12" [alt]="chat.name"
+                    class="chat-avatar" />
                 <!-- <span class="status-indicator" [class.online]="chat.online"></span> -->
             </div>
             <div class="chat-list-content">
