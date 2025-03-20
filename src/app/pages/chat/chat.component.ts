@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import {
   Component,
@@ -18,11 +17,12 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { map, Observable, shareReplay, Subscription, tap } from 'rxjs';
-import { AuthService } from '../../auth.service';
-import { ChatService } from '../../chat.service';
+import { Subscription, tap } from 'rxjs';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
 import { LogoComponent } from '../../components/logo/logo.component';
+import { AuthService } from '../../services/auth.service';
+import { ChatService } from '../../services/chat.service';
+import { SidenavService } from '../../services/sidenav.service';
 
 @Component({
   selector: 'app-chat',
@@ -50,10 +50,12 @@ import { LogoComponent } from '../../components/logo/logo.component';
 export class ChatComponent implements OnDestroy {
   chatService = inject(ChatService);
   authService = inject(AuthService);
-  breakpointObserver = inject(BreakpointObserver);
+  sidenavService = inject(SidenavService);
+
   chatScroll = viewChild<ElementRef>('chatScroll');
   lastChatSubscription: Subscription;
 
+  isHandset$ = this.sidenavService.isHandset$;
   selectedChat$ = this.chatService.selectedChat$;
   messages$ = this.chatService.messages$.pipe(
     tap((messages) => {
@@ -95,13 +97,6 @@ export class ChatComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.lastChatSubscription?.unsubscribe();
   }
-
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay(),
-    );
 
   onSubmit() {
     if (!this.newMessage.trim()) {

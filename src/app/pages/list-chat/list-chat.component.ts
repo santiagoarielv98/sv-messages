@@ -1,10 +1,9 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
-import { ChatService } from '../../chat.service';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
+import { ChatService } from '../../services/chat.service';
+import { SidenavService } from '../../services/sidenav.service';
 
 @Component({
   selector: 'app-list-chat',
@@ -14,13 +13,9 @@ import { RouterLink } from '@angular/router';
 })
 export class ListChatComponent {
   private chatService = inject(ChatService);
-  private breakpointObserver = inject(BreakpointObserver);
+  sidenavService = inject(SidenavService);
+
   chats$ = this.chatService.chats$;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay(),
-    );
+  isHandset$ = this.sidenavService.isHandset$;
 }

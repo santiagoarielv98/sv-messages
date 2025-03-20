@@ -5,13 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Chat, ChatService } from '../../chat.service';
+import { Chat, ChatService } from '../../services/chat.service';
+import { SidenavService } from '../../services/sidenav.service';
 import {
   ChatDialogData,
   CreateChatDialogComponent,
 } from '../create-chat-dialog/create-chat-dialog.component';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, Observable, shareReplay } from 'rxjs';
 import { LogoComponent } from '../logo/logo.component';
 
 @Component({
@@ -29,14 +28,9 @@ import { LogoComponent } from '../logo/logo.component';
   styleUrl: './chat-list.component.scss',
 })
 export class ChatListComponent {
-  private breakpointObserver = inject(BreakpointObserver);
+  sidenavService = inject(SidenavService);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay(),
-    );
+  isHandset$ = this.sidenavService.isHandset$;
 
   private chatService = inject(ChatService);
   readonly dialog = inject(MatDialog);

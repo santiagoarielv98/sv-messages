@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -7,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { map, Observable, shareReplay } from 'rxjs';
+import { SidenavService } from '../../services/sidenav.service';
 import { ChatListComponent } from '../chat-list/chat-list.component';
 
 @Component({
@@ -28,12 +27,7 @@ import { ChatListComponent } from '../chat-list/chat-list.component';
 export class SidenavComponent {
   title = 'SVChat';
 
-  private breakpointObserver = inject(BreakpointObserver);
+  sidenavService = inject(SidenavService);
 
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay(),
-    );
+  isHandset$ = this.sidenavService.isHandset$;
 }

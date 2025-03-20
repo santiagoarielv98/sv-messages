@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule, MatSelectionListChange } from '@angular/material/list';
-import { UserService } from '../../user.service';
+import { UserService } from '../../services/user.service';
 import { AsyncPipe } from '@angular/common';
 
 export interface ChatDialogData {
