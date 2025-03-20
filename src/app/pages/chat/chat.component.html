@@ -1,5 +1,6 @@
 @let chat = selectedChat$ | async;
 @let messages = messages$ | async;
+@let user = user$ | async;
 
 <ng-container *ngIf="chat; else noChatSelected">
     <!-- Barra superior del chat activo -->
@@ -8,14 +9,14 @@
             <mat-icon>arrow_back</mat-icon>
         </button>
         <div class="chat-header-avatar">
-            <img [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
-            <span class="status-indicator" [class.online]="chat.online"></span>
+            <img src="https://avatar.iran.liara.run/public/12" [alt]="chat.name" class="chat-avatar" />
+            <!-- <span class="status-indicator" [class.online]="chat.online"></span> -->
         </div>
         <div class="chat-header-info">
             <span class="chat-name">{{ chat.name }}</span>
-            <span class="chat-status">{{
+            <!-- <span class="chat-status">{{
                 chat.online ? 'En línea' : 'Última vez hoy'
-                }}</span>
+                }}</span> -->
         </div>
         <span class="toolbar-spacer"></span>
         <button mat-icon-button>
@@ -79,6 +80,7 @@
         <button mat-icon-button *ngIf="chat">
             <mat-icon>search</mat-icon>
         </button>
+        @if(user){
         <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
@@ -92,11 +94,17 @@
                 <span>Configuración</span>
             </button>
             <mat-divider></mat-divider>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="logout()">
                 <mat-icon>exit_to_app</mat-icon>
                 <span>Cerrar sesión</span>
             </button>
         </mat-menu>
+        } @else {
+        <!-- iniciar session con google -->
+        <button mat-icon-button (click)="loginWithGoogle()">
+            <mat-icon>login</mat-icon>
+        </button>
+        }
     </mat-toolbar>
     <div class="no-chat-selected">
         <mat-icon class="no-chat-icon">chat</mat-icon>

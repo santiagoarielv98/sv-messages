@@ -1,18 +1,21 @@
+@let selectedChat = selectedChat$ | async;
+@let selectedChatId = selectedChat?.id;
+
 <mat-toolbar>
     <span>Conversaciones</span>
     <span class="toolbar-spacer"></span>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="openDialog()">
         <mat-icon>add</mat-icon>
     </button>
 </mat-toolbar>
 
 <mat-nav-list>
     <mat-list-item class="chat-list-item-container" *ngFor="let chat of chats$ | async"
-        [class.active-chat]="(selectedChatId$ | async) === chat.id" (click)="selectChat(chat)">
+        [class.active-chat]="selectedChatId === chat.id" (click)="selectChat(chat)">
         <div class="chat-list-item">
             <div class="avatar-container">
-                <img matListItemAvatar [src]="chat.avatar" [alt]="chat.name" class="chat-avatar" />
-                <span class="status-indicator" [class.online]="chat.online"></span>
+                <img matListItemAvatar src="https://avatar.iran.liara.run/public/12" [alt]="chat.name" class="chat-avatar" />
+                <!-- <span class="status-indicator" [class.online]="chat.online"></span> -->
             </div>
             <div class="chat-list-content">
                 <div class="chat-header">
@@ -23,9 +26,9 @@
                 </div>
                 <div class="chat-footer">
                     <span class="chat-preview">{{ chat.lastMessage }}</span>
-                    <span *ngIf="chat.unread > 0" class="unread-badge">
+                    <!-- <span *ngIf="chat.unread > 0" class="unread-badge">
                         {{ chat.unread }}
-                    </span>
+                    </span> -->
                 </div>
             </div>
         </div>

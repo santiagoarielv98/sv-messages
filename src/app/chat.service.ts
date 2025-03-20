@@ -19,6 +19,16 @@ import {
   switchMap,
 } from 'rxjs';
 
+export interface User {
+  id: string;
+  name: string;
+}
+
+export interface UserFirestore {
+  id: string;
+  name: string;
+}
+
 export interface Message {
   id: number;
   text: string;
@@ -38,22 +48,17 @@ export interface MessageFirestore {
 export interface Chat {
   id: string;
   name: string;
-  avatar: string;
   lastMessage: string;
   timestamp: Date;
-  unread: number;
-  // messages: Message[];
-  online: boolean;
+  participants: string[];
 }
 
 export interface ChatFirestore {
-  id: string;
+  id?: string;
   name: string;
-  avatar: string;
-  lastMessage: string;
+  lastMessage: string | null;
   timestamp: Timestamp;
-  unread: number;
-  online: boolean;
+  participants: string[];
 }
 
 export const chatCollection = 'chats';
@@ -104,6 +109,10 @@ export class ChatService {
     ),
   );
 
+  constructor() {
+    this.initUserData();
+  }
+
   selectChat(chat: Chat) {
     this.selectedChat$.next(chat);
   }
@@ -136,5 +145,30 @@ export class ChatService {
       },
       { merge: true },
     );
+  }
+
+  createChat(chat: Pick<Chat, 'name' | 'participants'>) {
+    const newChat: ChatFirestore = {
+      ...chat,
+      lastMessage: null,
+      timestamp: Timestamp.now(),
+    };
+    addDoc(this.chatCollection, newChat);
+  }
+
+  initUserData() {
+    // const userId = 'user1';
+    // const userData = {
+    //   name: 'User 1',
+    //   chats: [],
+    // };
+    // setDoc(doc(this.firestore, 'users', userId), userData);
+    Array.from({ length: 10 }, (_, i) => {
+      const userId = `user${i + 1}`;
+      const userData = {
+        name: `User ${i + 1}`,
+      };
+      setDoc(doc(this.firestore, 'users', userId), userData);
+    });
   }
 }

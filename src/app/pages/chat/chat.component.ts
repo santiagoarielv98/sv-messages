@@ -15,6 +15,7 @@ import { ChatService } from '../../chat.service';
 import { map, Observable, shareReplay } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-chat',
@@ -40,6 +41,9 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
 })
 export class ChatComponent {
   private chatService = inject(ChatService);
+  userService = inject(UserService);
+  user$ = this.userService.user$;
+
   selectedChat$ = this.chatService.selectedChat$;
   messages$ = this.chatService.messages$;
   newMessage = '';
@@ -63,5 +67,13 @@ export class ChatComponent {
 
   onBack() {
     this.chatService.selectedChat$.next(null);
+  }
+
+  loginWithGoogle() {
+    this.userService.registerUserWithGoogle();
+  }
+
+  logout() {
+    this.userService.logout();
   }
 }
