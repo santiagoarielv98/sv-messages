@@ -18,6 +18,7 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface User {
   id: string;
@@ -32,7 +33,7 @@ export interface UserFirestore {
 export interface Message {
   id: number;
   text: string;
-  sender: 'me' | 'other';
+  sender: string;
   timestamp: Date;
   read: boolean;
 }
@@ -40,7 +41,7 @@ export interface Message {
 export interface MessageFirestore {
   id: number;
   text: string;
-  sender: 'me' | 'other';
+  sender: string;
   timestamp: Timestamp;
   read: boolean;
 }
@@ -69,6 +70,8 @@ export const messageCollection = 'messages';
 })
 export class ChatService {
   firestore = inject(Firestore);
+  authService = inject(AuthService);
+
   chatCollection = collection(this.firestore, chatCollection);
   messageCollection = collection(this.firestore, messageCollection);
 
@@ -118,6 +121,15 @@ export class ChatService {
   }
 
   sendMessage(message: string) {
+    if (!message.trim()) {
+      return;
+    }
+
+    const user = this.authService.currentUser;
+    if (!user) {
+      return;
+    }
+
     const selectedChat = this.selectedChat$.getValue();
     if (!selectedChat) {
       return;
@@ -131,7 +143,7 @@ export class ChatService {
     const newMessage: MessageFirestore = {
       id: 0,
       text: message,
-      sender: 'me',
+      sender: user.id,
       timestamp: Timestamp.now(),
       read: false,
     };
@@ -148,6 +160,14 @@ export class ChatService {
   }
 
   createChat(chat: Pick<Chat, 'name' | 'participants'>) {
+    const user = this.authService.currentUser;
+
+    if (!user) {
+      return;
+    }
+
+    chat.participants.push(user.id);
+
     const newChat: ChatFirestore = {
       ...chat,
       lastMessage: null,
@@ -157,12 +177,6 @@ export class ChatService {
   }
 
   initUserData() {
-    // const userId = 'user1';
-    // const userData = {
-    //   name: 'User 1',
-    //   chats: [],
-    // };
-    // setDoc(doc(this.firestore, 'users', userId), userData);
     Array.from({ length: 10 }, (_, i) => {
       const userId = `user${i + 1}`;
       const userData = {

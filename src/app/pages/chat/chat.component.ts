@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,11 +12,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { ChatService } from '../../chat.service';
 import { map, Observable, shareReplay } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AuthService } from '../../auth.service';
+import { ChatService } from '../../chat.service';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
-import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-chat',
@@ -41,8 +41,8 @@ import { UserService } from '../../user.service';
 })
 export class ChatComponent {
   private chatService = inject(ChatService);
-  userService = inject(UserService);
-  user$ = this.userService.user$;
+  authService = inject(AuthService);
+  user$ = this.authService.user$;
 
   selectedChat$ = this.chatService.selectedChat$;
   messages$ = this.chatService.messages$;
@@ -70,10 +70,10 @@ export class ChatComponent {
   }
 
   loginWithGoogle() {
-    this.userService.registerUserWithGoogle();
+    this.authService.registerUserWithGoogle();
   }
 
   logout() {
-    this.userService.logout();
+    this.authService.logout();
   }
 }
