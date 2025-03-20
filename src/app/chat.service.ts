@@ -118,6 +118,7 @@ export class ChatService {
 
   initExampleChat() {
     const example = doc(this.firestore, chatCollection, 'example');
+    const example2 = doc(this.firestore, chatCollection, 'example2');
 
     setDoc(
       example,
@@ -128,7 +129,6 @@ export class ChatService {
         timestamp: new Date('2025-03-19T10:30:00'),
         unread: 2,
         online: true,
-        // messages: []
       },
       { merge: true },
     ).then(() => {
@@ -140,6 +140,78 @@ export class ChatService {
           sender: 'other',
           timestamp: new Date('2025-03-19T10:30:00'),
           read: true,
+        },
+        { merge: true },
+      );
+    });
+    setDoc(
+      example2,
+      {
+        name: 'María García',
+        avatar: 'https://i.pravatar.cc/150?img=2',
+        lastMessage: 'Hasta luego',
+        timestamp: new Date('2025-03-19T10:30:00'),
+        unread: 1,
+        online: false,
+      },
+      { merge: true },
+    ).then(async () => {
+      await setDoc(
+        doc(this.firestore, chatCollection, 'example2', 'messages', '1'),
+        {
+          id: 1,
+          text: 'Hay novedades sobre el proyecto',
+          sender: 'other',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: true,
+        },
+        { merge: true },
+      );
+
+      await setDoc(
+        doc(this.firestore, chatCollection, 'example2', 'messages', '2'),
+        {
+          id: 2,
+          text: '¿Podemos hablar?',
+          sender: 'me',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: false,
+        },
+        { merge: true },
+      );
+
+      await setDoc(
+        doc(this.firestore, chatCollection, 'example2', 'messages', '3'),
+        {
+          id: 3,
+          text: 'Claro, ¿a qué hora?',
+          sender: 'other',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: false,
+        },
+        { merge: true },
+      );
+
+      await setDoc(
+        doc(this.firestore, chatCollection, 'example2', 'messages', '4'),
+        {
+          id: 4,
+          text: 'A las 3pm',
+          sender: 'other',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: false,
+        },
+        { merge: true },
+      );
+
+      await setDoc(
+        doc(this.firestore, chatCollection, 'example2', 'messages', '5'),
+        {
+          id: 5,
+          text: 'Perfecto, nos vemos entonces',
+          sender: 'me',
+          timestamp: new Date('2025-03-19T10:30:00'),
+          read: false,
         },
         { merge: true },
       );
