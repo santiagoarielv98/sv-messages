@@ -75,9 +75,12 @@ export class ChatService {
   chatCollection = collection(this.firestore, chatCollection);
   messageCollection = collection(this.firestore, messageCollection);
 
-  chats$ = collectionData(this.chatCollection, {
-    idField: 'id',
-  }).pipe(
+  chats$ = collectionData(
+    query(this.chatCollection, orderBy('timestamp', 'desc')),
+    {
+      idField: 'id',
+    },
+  ).pipe(
     map((chats) =>
       (chats as ChatFirestore[]).map((chat) => ({
         ...chat,
