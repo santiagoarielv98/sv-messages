@@ -1,6 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  viewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, Subscription, tap } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { ChatService } from '../../chat.service';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
@@ -39,14 +45,54 @@ import { ChatListComponent } from '../../components/chat-list/chat-list.componen
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent {
-  private chatService = inject(ChatService);
+export class ChatComponent implements OnDestroy {
+  chatService = inject(ChatService);
   authService = inject(AuthService);
+  breakpointObserver = inject(BreakpointObserver);
+  chatScroll = viewChild<ElementRef>('chatScroll');
+  lastChatSubscription: Subscription;
 
   selectedChat$ = this.chatService.selectedChat$;
-  messages$ = this.chatService.messages$;
+  messages$ = this.chatService.messages$.pipe(
+    tap((messages) => {
+      const lastMessage = messages[messages.length - 1];
+      const isLastMessageFromCurrentUser =
+        lastMessage?.sender === this.currentUser?.id;
+
+      if (isLastMessageFromCurrentUser) {
+        this.scrollToBottom();
+        return;
+      }
+
+      const chatScroll = this.chatScroll()?.nativeElement;
+      if (chatScroll) {
+        const isScrollNearBottom =
+          chatScroll.scrollTop + chatScroll.clientHeight >=
+          chatScroll.scrollHeight - 100;
+
+        if (isScrollNearBottom) {
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 0);
+        }
+      }
+    }),
+  );
   newMessage = '';
-  private breakpointObserver = inject(BreakpointObserver);
+
+  constructor() {
+    this.lastChatSubscription = this.chatService.lastChat$.subscribe((chat) => {
+      if (chat) {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 0);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.lastChatSubscription?.unsubscribe();
+  }
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -74,6 +120,16 @@ export class ChatComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  scrollToBottom() {
+    const chatScroll = this.chatScroll()?.nativeElement;
+    if (!chatScroll) {
+      return;
+    }
+    setTimeout(() => {
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    }, 0);
   }
 
   get currentUser() {

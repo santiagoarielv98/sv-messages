@@ -17,6 +17,7 @@ import {
   Observable,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 import { AuthService } from './auth.service';
 
@@ -89,6 +90,8 @@ export class ChatService {
     ),
   ) as Observable<Chat[]>;
   selectedChat$ = new BehaviorSubject<Chat | null>(null);
+  lastChat$ = new BehaviorSubject<Chat | null>(null);
+
   messages$ = this.selectedChat$.pipe(
     distinctUntilChanged(),
     switchMap((chatId) => {
@@ -106,6 +109,15 @@ export class ChatService {
       return collectionData(query(messagesRef, orderBy('timestamp', 'asc')), {
         idField: 'id',
       });
+    }),
+    tap((messages) => {
+      if (messages) {
+        const lastChat = this.lastChat$.getValue()?.id;
+        const currentChat = this.selectedChat$.getValue()?.id;
+        if (lastChat !== currentChat) {
+          this.lastChat$.next(this.selectedChat$.getValue());
+        }
+      }
     }),
     map((messages) =>
       (messages as MessageFirestore[]).map((message) => ({
