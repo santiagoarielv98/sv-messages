@@ -91,12 +91,20 @@
     </mat-toolbar>
     @if(isHandset) {
     <app-chat-list />
-    }@else{
-
-    <div class="no-chat-selected">
+    }@else if(currentUser){
+    <div class="chat-info">
         <mat-icon class="no-chat-icon">chat</mat-icon>
         <h2>Selecciona un chat para comenzar</h2>
         <p>Elige una conversación de la lista para ver los mensajes</p>
+    </div>
+    }@else {
+    <div class="chat-info">
+        <mat-icon class="no-chat-icon">chat</mat-icon>
+        <h2>Inicia sesión para ver tus mensajes</h2>
+        <p>Inicia sesión para acceder a todas las funciones de la aplicación</p>
+        <button mat-stroked-button class="google-button" (click)="openSignInDialog()">
+            Iniciar sesión
+        </button>
     </div>
     }
 </ng-template>

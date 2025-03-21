@@ -19,8 +19,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Subscription, tap } from 'rxjs';
+import { AuthDialogComponent } from '../../components/auth-dialog/auth-dialog.component';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
-import { LoginDialogComponent } from '../../components/auth-dialog/auth-dialog.component';
 import { LogoComponent } from '../../components/logo/logo.component';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
@@ -129,7 +129,7 @@ export class ChatComponent implements OnDestroy {
   }
 
   openSignInDialog() {
-    this.dialog.open(LoginDialogComponent, {
+    this.dialog.open(AuthDialogComponent, {
       disableClose: true,
       width: '400px',
       height: 'auto',

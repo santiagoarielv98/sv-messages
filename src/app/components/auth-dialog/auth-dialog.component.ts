@@ -40,7 +40,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './auth-dialog.component.scss',
   standalone: true,
 })
-export class LoginDialogComponent implements OnInit {
+export class AuthDialogComponent implements OnInit {
   hide = signal(true);
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -50,7 +50,7 @@ export class LoginDialogComponent implements OnInit {
   tabIndex = signal(0);
 
   authService = inject(AuthService);
-  dialogRef = inject(MatDialogRef<LoginDialogComponent>);
+  dialogRef = inject(MatDialogRef<AuthDialogComponent>);
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
