@@ -12,6 +12,7 @@ import {
   CreateChatDialogComponent,
 } from '../create-chat-dialog/create-chat-dialog.component';
 import { LogoComponent } from '../logo/logo.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -29,6 +30,7 @@ import { LogoComponent } from '../logo/logo.component';
 })
 export class ChatListComponent {
   sidenavService = inject(SidenavService);
+  authService = inject(AuthService);
 
   isHandset$ = this.sidenavService.isHandset$;
 
@@ -43,6 +45,9 @@ export class ChatListComponent {
   }
 
   openDialog(): void {
+    if (this.authService.currentUser === null) {
+      return;
+    }
     const dialogRef = this.dialog.open(CreateChatDialogComponent);
 
     dialogRef.afterClosed().subscribe((result: ChatDialogData | undefined) => {

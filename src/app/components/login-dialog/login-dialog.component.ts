@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -33,6 +33,12 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
 })
 export class LoginDialogComponent implements OnInit {
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
+
   authService = inject(AuthService);
   dialogRef = inject(MatDialogRef<LoginDialogComponent>);
 
