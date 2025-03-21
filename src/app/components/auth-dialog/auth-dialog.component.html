@@ -93,15 +93,15 @@
                     [disabled]="loading || registerForm.invalid">
                     Crear cuenta
                 </button>
+                <div class="divider-container">
+                    <mat-divider></mat-divider>
+                    <span class="divider-text">o</span>
+                    <mat-divider></mat-divider>
+                </div>
+                <button mat-stroked-button class="google-button" (click)="loginWithGoogle()" [disabled]="loading">
+                    Continuar con Google
+                </button>
             </form>
-            <div class="divider-container">
-                <mat-divider></mat-divider>
-                <span class="divider-text">o</span>
-                <mat-divider></mat-divider>
-            </div>
-            <button mat-stroked-button class="google-button" (click)="loginWithGoogle()" [disabled]="loading">
-                Continuar con Google
-            </button>
         </mat-tab>
     </mat-tab-group>
 
