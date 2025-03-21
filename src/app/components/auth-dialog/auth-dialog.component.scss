@@ -1,11 +1,13 @@
-.close-button{
+.close-button {
     position: absolute;
     top: 16px;
     right: 16px;
     color: rgba(0, 0, 0, 0.54);
 }
 
-.dialog-input,.google-button,.login-button {
+.dialog-input,
+.google-button,
+.login-button {
     width: 100%;
 }
 
@@ -23,4 +25,9 @@
         color: rgba(0, 0, 0, 0.6);
         font-size: 14px;
     }
+}
+
+.login-form,
+.register-form {
+    overflow: hidden;
 }

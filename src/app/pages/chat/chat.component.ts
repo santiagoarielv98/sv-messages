@@ -20,7 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Subscription, tap } from 'rxjs';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
-import { LoginDialogComponent } from '../../components/login-dialog/login-dialog.component';
+import { LoginDialogComponent } from '../../components/auth-dialog/auth-dialog.component';
 import { LogoComponent } from '../../components/logo/logo.component';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
@@ -132,7 +132,7 @@ export class ChatComponent implements OnDestroy {
     this.dialog.open(LoginDialogComponent, {
       disableClose: true,
       width: '400px',
-      height: '500px',
+      height: 'auto',
     });
   }
 

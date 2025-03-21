@@ -45,7 +45,7 @@ export class ChatListComponent {
   }
 
   openDialog(): void {
-    if (this.authService.currentUser === null) {
+    if (!this.authService.currentUser) {
       return;
     }
     const dialogRef = this.dialog.open(CreateChatDialogComponent);
