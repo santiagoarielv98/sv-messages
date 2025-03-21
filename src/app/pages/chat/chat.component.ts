@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Subscription, tap } from 'rxjs';
 import { ChatListComponent } from '../../components/chat-list/chat-list.component';
+import { LoginDialogComponent } from '../../components/login-dialog/login-dialog.component';
 import { LogoComponent } from '../../components/logo/logo.component';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
@@ -51,6 +53,7 @@ export class ChatComponent implements OnDestroy {
   chatService = inject(ChatService);
   authService = inject(AuthService);
   sidenavService = inject(SidenavService);
+  dialog = inject(MatDialog);
 
   chatScroll = viewChild<ElementRef>('chatScroll');
   lastChatSubscription: Subscription;
@@ -111,10 +114,6 @@ export class ChatComponent implements OnDestroy {
     this.chatService.selectedChat$.next(null);
   }
 
-  loginWithGoogle() {
-    this.authService.registerUserWithGoogle();
-  }
-
   logout() {
     this.authService.logout();
   }
@@ -127,6 +126,14 @@ export class ChatComponent implements OnDestroy {
     setTimeout(() => {
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }, 0);
+  }
+
+  openSignInDialog() {
+    this.dialog.open(LoginDialogComponent, {
+      disableClose: true,
+      width: '400px',
+      height: '500px',
+    });
   }
 
   get currentUser() {

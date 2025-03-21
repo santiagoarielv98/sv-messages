@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>
+    <span class="dialog-title">Iniciar sesión</span>
+    <button mat-icon-button mat-dialog-close aria-label="Cerrar" class="close-button">
+        <mat-icon>close</mat-icon>
+    </button>
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div [formGroup]="loginForm">
+        <p class="dialog-description">
+            Ingresa tus credenciales para acceder a tu cuenta
+        </p>
+        <mat-form-field appearance="outline" class="dialog-input">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput formControlName="email" type="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="dialog-input">
+            <mat-label>Contraseña</mat-label>
+            <input matInput formControlName="password" type="password" />
+            <button mat-icon-button matSuffix aria-label="Mostrar contraseña" type="button">
+                <mat-icon>visibility</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="login-button" [disabled]="loading">
+            Iniciar sesión
+        </button>
+
+        <div class="divider-container">
+            <mat-divider></mat-divider>
+            <span class="divider-text">o</span>
+            <mat-divider></mat-divider>
+        </div>
+
+        <button mat-stroked-button class="google-button" (click)="loginWithGoogle()" [disabled]="loading">
+            Continuar con Google
+        </button>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button>¿Olvidaste tu contraseña?</button>
+    <button mat-flat-button>Crear cuenta</button>
+</mat-dialog-actions>

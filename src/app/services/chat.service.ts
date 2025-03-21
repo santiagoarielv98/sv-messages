@@ -9,6 +9,7 @@ import {
   query,
   setDoc,
   Timestamp,
+  where,
 } from '@angular/fire/firestore';
 import {
   BehaviorSubject,
@@ -76,12 +77,18 @@ export class ChatService {
   chatCollection = collection(this.firestore, chatCollection);
   messageCollection = collection(this.firestore, messageCollection);
 
-  chats$ = collectionData(
-    query(this.chatCollection, orderBy('timestamp', 'desc')),
-    {
-      idField: 'id',
-    },
-  ).pipe(
+  chats$ = this.authService.user$.pipe(
+    switchMap((user) => {
+      if (!user) {
+        return of([]);
+      }
+      const q = query(
+        this.chatCollection,
+        where('participants', 'array-contains', user.uid),
+        orderBy('timestamp', 'desc'),
+      );
+      return collectionData(q, { idField: 'id' });
+    }),
     map((chats) =>
       (chats as ChatFirestore[]).map((chat) => ({
         ...chat,
@@ -128,7 +135,7 @@ export class ChatService {
   );
 
   constructor() {
-    this.initUserData();
+    // this.initUserData();
   }
 
   selectChat(chat: Chat) {

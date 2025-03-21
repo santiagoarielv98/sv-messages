@@ -25,6 +25,7 @@ export class AuthService implements OnDestroy {
   firestore = inject(Firestore);
   userCollection = collection(this.firestore, userCollection);
   userSubscription: Subscription;
+  loading = false;
 
   user$ = user(this.auth);
 
@@ -51,7 +52,8 @@ export class AuthService implements OnDestroy {
     this.userSubscription.unsubscribe();
   }
 
-  async registerUserWithGoogle() {
+  async loginWithGoogle() {
+    this.loading = true;
     const user = await signInWithPopup(this.auth, new GoogleAuthProvider());
 
     if (user) {
@@ -65,6 +67,7 @@ export class AuthService implements OnDestroy {
         });
       }
     }
+    this.loading = false;
   }
 
   logout() {
