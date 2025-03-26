@@ -10,7 +10,13 @@ import {
   signOut,
   user,
 } from '@angular/fire/auth';
-import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import {
+  doc,
+  Firestore,
+  getDoc,
+  setDoc,
+  Timestamp,
+} from '@angular/fire/firestore';
 import {
   BehaviorSubject,
   catchError,
@@ -95,8 +101,8 @@ export class AuthService {
       photoURL: firebaseUser.photoURL || '',
       createdAt: userSnap.exists()
         ? (userSnap.data() as User).createdAt
-        : new Date(),
-      lastLoginAt: new Date(),
+        : Timestamp.now(),
+      lastLoginAt: Timestamp.now(),
     };
 
     await setDoc(userRef, userData, { merge: true });

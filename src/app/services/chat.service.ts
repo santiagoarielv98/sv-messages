@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
+  Timestamp,
   addDoc,
   collection,
   collectionData,
@@ -36,7 +37,7 @@ export class ChatService {
   createChat(chat: Chat): Observable<string> {
     const chatData: Omit<Chat, 'id'> = {
       name: chat.name,
-      createdAt: new Date(),
+      createdAt: Timestamp.now(),
       participants: chat.participants,
     };
 
@@ -52,7 +53,7 @@ export class ChatService {
     const messageData: Omit<Message, 'id'> = {
       content: message.content,
       senderId: message.senderId,
-      timestamp: new Date(),
+      timestamp: Timestamp.now(),
     };
 
     const messagesRef = collection(this.firestore, `chats/${chatId}/messages`);

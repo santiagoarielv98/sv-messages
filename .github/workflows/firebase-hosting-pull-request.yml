@@ -20,7 +20,7 @@ jobs:
             production: true,
             firebase: {
               projectId: "${{ secrets.FIREBASE_PROJECT_ID }}",
-              appId: "${{ secrets.FIREBASE_APP_ID }}"
+              appId: "${{ secrets.FIREBASE_APP_ID }}",
               storageBucket: "${{ secrets.FIREBASE_STORAGE_BUCKET }}",
               apiKey: "${{ secrets.FIREBASE_API_KEY }}",
               authDomain: "${{ secrets.FIREBASE_AUTH_DOMAIN }}",

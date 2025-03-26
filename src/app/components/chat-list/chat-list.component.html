@@ -5,7 +5,7 @@
         <div matListItemTitle>{{ chat.name }}</div>
         <div matListItemLine>{{ chat.lastMessage || 'No messages yet' }}</div>
         <div matListItemMeta>
-            {{ chat.createdAt | date:'short' }}
+            {{ chat.createdAt.toDate() | date:'short' }}
         </div>
     </a>
     }
