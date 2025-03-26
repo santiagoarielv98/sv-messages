@@ -12,7 +12,7 @@ interface User {
   selector: 'app-root',
   imports: [RouterOutlet, AsyncPipe],
   template: `
-    <h1>Welcome to {{ title }}!</h1>
+    <h1>Welcome to {{ title }}!!!!!!</h1>
     <h2>Users</h2>
     <ul>
       @for (user of user$ | async; track user.id) {
