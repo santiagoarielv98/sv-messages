@@ -1,18 +1,31 @@
 @let isHandset = isHandset$ | async;
 @let userChats = userChats$ | async;
+@let selectedChat = selectedChat$ | async;
+@let selectedChatId = selectedChat?.id || null;
 
 <mat-sidenav-container class="sidenav-container">
   @if(!isHandset) {
   <mat-sidenav class="sidenav" fixedInViewport role="'navigation'" mode="side" [opened]="true">
     <app-user-toolbar />
-    <app-chat-list [chats]="userChats || []" />
+    <app-chat-list [chats]="userChats || []" [selectedChatId]="selectedChatId"
+      (chatSelected)="onChatSelected($event)" />
   </mat-sidenav>
   }
   <mat-sidenav-content>
 
     @if(isHandset ) {
     <app-user-toolbar />
-    <app-chat-list [chats]="userChats || []" />
+    <app-chat-list [chats]="userChats || []" [selectedChatId]="selectedChatId"
+      (chatSelected)="onChatSelected($event)" />
     }
+
+    @if(selectedChat){
+    <app-chat />
+    } @else {
+    <div class="no-chat-selected">
+      <p>Select a chat to start messaging</p>
+    </div>
+    }
+
   </mat-sidenav-content>
 </mat-sidenav-container>

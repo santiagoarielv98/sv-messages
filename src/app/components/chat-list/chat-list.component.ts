@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -12,4 +12,12 @@ import { Chat } from '../../models/chat.model';
 })
 export class ChatListComponent {
   @Input() chats: Chat[] = [];
+
+  @Input() selectedChatId: string | null = null;
+
+  @Output() chatSelected = new EventEmitter<Chat>();
+
+  selectChat(chat: Chat) {
+    this.chatSelected.emit(chat);
+  }
 }

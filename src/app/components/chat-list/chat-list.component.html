@@ -1,6 +1,6 @@
 <mat-nav-list>
     @for(chat of chats; track chat.id){
-    <a mat-list-item href="#">
+    <a mat-list-item href="#" [activated]="selectedChatId === chat.id" (click)="selectChat(chat)">
         <img matListItemAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Avatar">
         <div matListItemTitle>{{ chat.name }}</div>
         <div matListItemLine>{{ chat.lastMessage || 'No messages yet' }}</div>
