@@ -52,6 +52,10 @@ export class AuthService {
     );
   }
 
+  logout() {
+    return from(signOut(this.auth));
+  }
+
   private async handleUserLogin(
     firebaseUser: FirebaseUser,
     displayName?: string,
@@ -81,9 +85,5 @@ export class AuthService {
     const randomNumber = Math.floor(Math.random() * 100000);
 
     return `Usuario${randomNumber}`;
-  }
-
-  logout() {
-    return from(signOut(this.auth));
   }
 }
