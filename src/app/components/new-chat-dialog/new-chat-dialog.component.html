@@ -1,0 +1,34 @@
+@let loading = loading$ | async;
+@let user = user$ | async;
+@let participants = participants$ | async;
+
+<h2 matDialogTitle>Crear nuevo chat</h2>
+<mat-dialog-content>
+  <p>
+    Selecciona los usuarios que deseas agregar al nuevo chat.
+  </p>
+  <form [formGroup]="newChatForm" (ngSubmit)="onCreateChat()" class="new-chat-form">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nombre del chat</mat-label>
+      <input matInput formControlName="chatName" required>
+      <mat-error *ngIf="newChatForm.get('chatName')?.invalid">
+        Ingrese un nombre válido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-selection-list [multiple]="true" class="user-list" formControlName="participants"
+      (selectionChange)="onSelectionChange($event)">
+      @for (participant of participants; track participant.id) {
+      <mat-list-option [disabled]="participant.id === user?.id" [value]="participant.id">
+        {{participant.displayName}}</mat-list-option>
+      }
+    </mat-selection-list>
+  </form>
+  <mat-dialog-actions>
+    <button mat-button (click)="onClose()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="newChatForm.invalid || loading"
+      form="newChatForm">
+      Crear Chat
+    </button>
+  </mat-dialog-actions>
+</mat-dialog-content>

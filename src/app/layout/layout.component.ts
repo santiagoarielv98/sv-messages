@@ -10,6 +10,9 @@ import { Chat } from '../models/chat.model';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
 import { ChatComponent } from '../components/chat/chat.component';
+import { Message } from '../models/message.model';
+import { Timestamp } from '@angular/fire/firestore';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-layout',
@@ -28,6 +31,7 @@ export class LayoutComponent {
   private chatService = inject(ChatService);
   private breakpointObserver = inject(BreakpointObserver);
   private selectedChatSubject = new BehaviorSubject<Chat | null>(null);
+  private userSubject = new BehaviorSubject<User | null>(null);
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
@@ -38,6 +42,7 @@ export class LayoutComponent {
 
   userChats$: Observable<Chat[]> = this.authService.getCurrentUser().pipe(
     switchMap((user) => {
+      this.userSubject.next(user);
       if (!user) return of([]);
       return this.chatService.getChatsByUser(user.id);
     }),
@@ -53,5 +58,22 @@ export class LayoutComponent {
 
   onChatSelected(chat: Chat) {
     this.selectedChatSubject.next(chat);
+  }
+
+  sendMessage(value: string) {
+    const chat = this.selectedChatSubject.getValue();
+    const user = this.userSubject.getValue();
+
+    if (chat?.id && user) {
+      const message: Message = {
+        content: value,
+        timestamp: Timestamp.now(),
+        senderId: user.id,
+      };
+
+      this.chatService.sendMessage(chat.id, message).subscribe(() => {
+        this.selectedChatSubject.next(chat);
+      });
+    }
   }
 }

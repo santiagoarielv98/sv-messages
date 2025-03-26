@@ -1,6 +1,29 @@
-<mat-grid-list cols="4" rowHeight="100px">
-    @for (tile of tiles; track tile) {
-    <mat-grid-tile [colspan]="tile.cols" [rowspan]="tile.rows" 
-        [style.background]="tile.color">{{tile.text}}</mat-grid-tile>
+<mat-toolbar>
+    <button mat-icon-button>
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span>My App</span>
+</mat-toolbar>
+
+<mat-list class="chat-messages">
+    @for(message of messages; track message.id){
+    <mat-list-item>
+        <img matListItemAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Avatar">
+        <div matListItemTitle>{{ message.senderId }}</div>
+        <div matListItemLine>{{ message.content }}</div>
+        <div matListItemMeta>
+            {{ message.timestamp.toDate()| date:'short' }}
+        </div>
+    </mat-list-item>
     }
-</mat-grid-list>
+</mat-list>
+
+<form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+    <mat-form-field subscriptSizing="dynamic" class="message-input" >
+        <mat-label>Escribe un mensaje</mat-label>
+        <input matInput formControlName="message" placeholder="Type a message">
+        <button mat-icon-button matSuffix [disabled]="messageForm.invalid">
+            <mat-icon>send</mat-icon>
+        </button>
+    </mat-form-field>
+</form>

@@ -5,7 +5,7 @@
 
 <mat-sidenav-container class="sidenav-container">
   @if(!isHandset) {
-  <mat-sidenav class="sidenav" fixedInViewport role="'navigation'" mode="side" [opened]="true">
+  <mat-sidenav class="sidenav" fixedInViewport role="'navigation'" mode="side" [opened]="true" disableClose>
     <app-user-toolbar />
     <app-chat-list [chats]="userChats || []" [selectedChatId]="selectedChatId"
       (chatSelected)="onChatSelected($event)" />

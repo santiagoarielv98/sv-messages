@@ -46,7 +46,7 @@ export class ChatService {
     );
   }
 
-  async sendMessage(chatId: string, message: Message): Promise<void> {
+  sendMessage(chatId: string, message: Message) {
     if (!message.content.trim() || !message.senderId) {
       throw new Error('Message content and senderId are required');
     }
@@ -57,6 +57,8 @@ export class ChatService {
     };
 
     const messagesRef = collection(this.firestore, `chats/${chatId}/messages`);
-    await addDoc(messagesRef, messageData);
+    return from(addDoc(messagesRef, messageData)).pipe(
+      map((docRef) => docRef.id),
+    );
   }
 }
