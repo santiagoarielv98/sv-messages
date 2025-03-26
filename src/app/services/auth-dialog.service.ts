@@ -16,7 +16,6 @@ export class AuthDialogService {
         this.openDialog();
       } else {
         this.dialog.closeAll();
-        console.log('User is authenticated', isAuthenticated);
       }
     });
   }

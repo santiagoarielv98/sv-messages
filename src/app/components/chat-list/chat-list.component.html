@@ -1,10 +1,17 @@
 <mat-nav-list>
+    @for(chat of chats; track chat.id){
     <a mat-list-item href="#">
         <img matListItemAvatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" alt="Avatar">
-        <div matListItemTitle>Nombre</div>
-        <div matListItemLine>Chat</div>
-        <div matListItemMeta >
-            Nombre
+        <div matListItemTitle>{{ chat.name }}</div>
+        <div matListItemLine>{{ chat.lastMessage || 'No messages yet' }}</div>
+        <div matListItemMeta>
+            {{ chat.createdAt | date:'short' }}
         </div>
     </a>
+    }
+    @if(chats.length === 0) {
+    <div class="no-chats-message">
+        <p>No chats available</p>
+    </div>
+    }
 </mat-nav-list>

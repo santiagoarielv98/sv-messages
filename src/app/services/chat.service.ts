@@ -17,7 +17,7 @@ import { Message } from '../models/message.model';
 export class ChatService {
   private readonly firestore: Firestore = inject(Firestore);
 
-  getChatsById(userId: string): Observable<Chat[]> {
+  getChatsByUser(userId: string): Observable<Chat[]> {
     const chatsRef = collection(this.firestore, 'chats');
     const queryRef = query(
       chatsRef,

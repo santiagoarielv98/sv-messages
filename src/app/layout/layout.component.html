@@ -1,17 +1,18 @@
 @let isHandset = isHandset$ | async;
+@let userChats = userChats$ | async;
 
 <mat-sidenav-container class="sidenav-container">
   @if(!isHandset) {
   <mat-sidenav class="sidenav" fixedInViewport role="'navigation'" mode="side" [opened]="true">
     <app-user-toolbar />
-    <app-chat-list />
+    <app-chat-list [chats]="userChats || []" />
   </mat-sidenav>
   }
   <mat-sidenav-content>
 
-    @if(isHandset) {
+    @if(isHandset ) {
     <app-user-toolbar />
-    <app-chat-list />
+    <app-chat-list [chats]="userChats || []" />
     }
   </mat-sidenav-content>
 </mat-sidenav-container>
