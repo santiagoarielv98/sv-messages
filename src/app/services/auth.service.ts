@@ -1,16 +1,26 @@
 import { inject, Injectable } from '@angular/core';
 import {
   Auth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  user,
-  User as FirebaseUser,
-  signOut,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  User as FirebaseUser,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  user,
 } from '@angular/fire/auth';
 import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
-import { catchError, from, of, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  finalize,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -19,8 +29,16 @@ import { User } from '../models/user.model';
 export class AuthService {
   private readonly auth = inject(Auth);
   private readonly firestore = inject(Firestore);
+  private isLoadingSubject = new BehaviorSubject<boolean>(true);
 
   readonly currentUser$ = user(this.auth);
+  readonly isLoading$ = this.isLoadingSubject.asObservable();
+
+  constructor() {
+    onAuthStateChanged(this.auth, () => {
+      this.isLoadingSubject.next(false);
+    });
+  }
 
   register(email: string, password: string, displayName: string) {
     return from(
@@ -34,10 +52,14 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return from(signInWithEmailAndPassword(this.auth, email, password));
+    this.isLoadingSubject.next(true);
+    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
+      finalize(() => this.isLoadingSubject.next(false)),
+    );
   }
 
   loginWithGoogle() {
+    this.isLoadingSubject.next(true);
     const provider = new GoogleAuthProvider();
 
     return from(signInWithPopup(this.auth, provider)).pipe(
@@ -49,6 +71,7 @@ export class AuthService {
         console.error('Error en inicio de sesión', error);
         return of(null);
       }),
+      finalize(() => this.isLoadingSubject.next(false)),
     );
   }
 
@@ -85,5 +108,29 @@ export class AuthService {
     const randomNumber = Math.floor(Math.random() * 100000);
 
     return `Usuario${randomNumber}`;
+  }
+
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUser$.pipe(
+      switchMap((firebaseUser) => {
+        if (!firebaseUser) return of(null);
+
+        const userRef = doc(this.firestore, `users/${firebaseUser.uid}`);
+        return from(getDoc(userRef)).pipe(
+          map((userSnap) =>
+            userSnap.exists()
+              ? ({
+                  ...userSnap.data(),
+                  id: userSnap.id,
+                } as User)
+              : null,
+          ),
+        );
+      }),
+    );
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.currentUser$.pipe(map((user) => !!user));
   }
 }
