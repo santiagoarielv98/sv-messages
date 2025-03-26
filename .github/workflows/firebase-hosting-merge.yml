@@ -11,6 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configure environment
+        run: |
+          cat <<EOF > src/environments/environment.prod.ts
+          export const environment = {
+            production: true,
+            firebase: {
+              projectId: "${{ secrets.FIREBASE_PROJECT_ID }}",
+              appId: "${{ secrets.FIREBASE_APP_ID }}"
+              storageBucket: "${{ secrets.FIREBASE_STORAGE_BUCKET }}",
+              apiKey: "${{ secrets.FIREBASE_API_KEY }}",
+              authDomain: "${{ secrets.FIREBASE_AUTH_DOMAIN }}",
+              messagingSenderId: "${{ secrets.FIREBASE_SENDER_ID }}",
+              measurementId: "${{ secrets.FIREBASE_MEASUREMENT_ID }}"
+            }
+          };
+          EOF
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build -- --configuration production
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
