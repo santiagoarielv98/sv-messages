@@ -19,12 +19,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../../services/auth.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth-dialog',
   imports: [
     AsyncPipe,
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
