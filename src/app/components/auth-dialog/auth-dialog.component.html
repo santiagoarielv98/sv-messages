@@ -1,0 +1,89 @@
+@let loading = loading$ | async;
+
+<mat-tab-group>
+  <mat-tab label="Iniciar Sesión">
+    <h2 matDialogTitle>Iniciar Sesión</h2>
+    <mat-dialog-content>
+      <p>Inicia sesión para acceder a tu cuenta</p>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form" id="loginForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput formControlName="email" type="email" required>
+          <mat-error *ngIf="loginForm.get('email')?.invalid">
+            Ingrese un correo válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.invalid">
+            La contraseña debe tener al menos 6 caracteres
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-raised-button color="warn" (click)="loginWithGoogle()" type="button" [disabled]="loading">
+        Iniciar Sesión con Google
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || loading" form="loginForm">
+        Iniciar Sesión
+      </button>
+    </mat-dialog-actions>
+  </mat-tab>
+
+  <mat-tab label="Registrarse">
+    <h2 matDialogTitle>Registrarse</h2>
+    <mat-dialog-content>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form" id="registerForm">
+        <p>Regístrate para crear una nueva cuenta</p>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de Usuario</mat-label>
+          <input matInput formControlName="username" required>
+          <mat-error *ngIf="registerForm.get('username')?.invalid">
+            Ingrese un nombre de usuario válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput formControlName="email" type="email" required>
+          <mat-error *ngIf="registerForm.get('email')?.invalid">
+            Ingrese un correo válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerForm.get('password')?.invalid">
+            La contraseña debe tener al menos 6 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmar Contraseña</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" required>
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.invalid">
+            Confirme su contraseña
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-raised-button color="warn" (click)="loginWithGoogle()" type="button" [disabled]="loading">
+        Registrarse con Google
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid || loading" form="registerForm">
+        Registrarse
+      </button>
+    </mat-dialog-actions>
+  </mat-tab>
+</mat-tab-group>
