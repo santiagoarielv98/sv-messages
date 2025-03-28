@@ -40,13 +40,7 @@ export class LayoutComponent {
       shareReplay(),
     );
 
-  userChats$: Observable<Chat[]> = this.authService.getCurrentUser().pipe(
-    switchMap((user) => {
-      this.userSubject.next(user);
-      if (!user) return of([]);
-      return this.chatService.getChatsByUser(user.id);
-    }),
-  );
+  userChats$: Observable<Chat[]> = this.chatService.getChats();
   selectedChat$ = this.selectedChatSubject.asObservable();
   // mensajes del chat seleccionado
   messages$ = this.selectedChat$.pipe(

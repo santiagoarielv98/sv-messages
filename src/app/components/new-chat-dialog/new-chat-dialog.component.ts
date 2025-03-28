@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import {
   MatDialogActions,
   MatDialogContent,
+  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule, MatSelectionListChange } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -48,12 +48,10 @@ import { UserService } from '../../services/user.service';
 })
 export class NewChatDialogComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
+  private readonly dialogRef = inject(MatDialogRef<NewChatDialogComponent>);
 
-  user$ = this.authService.getCurrentUser();
   participants$ = this.userService.getUsers();
-  loading$ = this.authService.isLoading$;
 
   newChatForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -67,7 +65,7 @@ export class NewChatDialogComponent {
   }
 
   onClose() {
-    throw new Error('Method not implemented.');
+    this.dialogRef.close();
   }
 
   onSelectionChange(event: MatSelectionListChange) {

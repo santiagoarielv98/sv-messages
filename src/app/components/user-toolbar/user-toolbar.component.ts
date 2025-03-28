@@ -1,9 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../services/auth.service';
-import { AsyncPipe } from '@angular/common';
 import { NewChatDialogService } from '../../services/new-chat-dialog.service';
 
 @Component({
@@ -12,13 +12,10 @@ import { NewChatDialogService } from '../../services/new-chat-dialog.service';
   templateUrl: './user-toolbar.component.html',
   styleUrl: './user-toolbar.component.scss',
 })
-export class UserToolbarComponent implements OnInit {
+export class UserToolbarComponent {
   private readonly authService = inject(AuthService);
   private readonly newChatDialogService = inject(NewChatDialogService);
 
-  ngOnInit(): void {
-    this.newChatDialogService.openDialog();
-  }
   user$ = this.authService.getCurrentUser();
   logout() {
     this.authService.logout().subscribe({
