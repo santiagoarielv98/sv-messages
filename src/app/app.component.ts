@@ -1,6 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,6 @@ import { collection, collectionData, Firestore } from '@angular/fire/firestore';
   styles: [],
 })
 export class AppComponent {
-  firestore = inject(Firestore);
-  itemCollection = collection(this.firestore, 'example');
-  item$ = collectionData(this.itemCollection, { idField: 'id' });
+  authService = inject(AuthService);
+  user$ = this.authService.user$;
 }

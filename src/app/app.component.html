@@ -1,5 +1,8 @@
-@for(item of item$ | async; track item.id) {
-    <div class="item">
-        <p>{{item.id}}</p>
-    </div>
-}
+<header>
+    @if(user$ | async; as user){
+        <h1>Welcome, {{ user.displayName }}</h1>
+        <button (click)="authService.logout()">Logout</button>
+    }@else {
+        <button (click)="authService.login()">Login</button>
+    }
+</header>
