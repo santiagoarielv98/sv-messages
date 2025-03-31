@@ -6,3 +6,48 @@
         <button (click)="authService.login()">Login</button>
     }
 </header>
+
+@if(users$ | async; as users){
+    <form (ngSubmit)="createChat()">
+        <input type="text" [(ngModel)]="chatName" name="chatName" required>
+        <!-- seleccionar miembros -->
+        <select [(ngModel)]="selectedMembers" name="selectedMembers" multiple>
+            @for(user of users; track user.id){
+                <option [value]="user.id">{{ user.name }}</option>
+            }
+        </select>
+        <button type="submit">Create chat</button>
+    </form>
+}
+
+@for(chat of chats$ | async;track chat.id){
+    <li>
+        {{chat.id}} <button (click)="selectChat(chat)">Seleccionar chat</button>
+    </li>
+} @empty {
+    <li>No hay chats.</li>
+}
+
+
+@if(selectedChat$ | async; as selectedChat){
+    <h2>Selected chat: {{ selectedChat.id }}</h2>
+    <button (click)="selectChat(null)">Close chat</button>
+
+    <ul>
+        @for(message of messages$ | async; track message.id){
+            <li>
+                <strong>{{message.body}}:</strong> {{message.id}}
+            </li>
+        } @empty {
+            <li>No messages.</li>
+        }
+    </ul>
+
+    <form (ngSubmit)="sendMessage()">
+        <input type="text" [(ngModel)]="messageBody" name="messageBody" required>
+        <button type="submit">Send</button>
+    </form>
+
+} @else {
+    <h2>No chat selected</h2>
+}
