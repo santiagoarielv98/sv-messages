@@ -1,4 +1,5 @@
-<h1>hello world</h1>
-<p>
-    
-</p>
+@for(item of item$ | async; track item.id) {
+    <div class="item">
+        <p>{{item.id}}</p>
+    </div>
+}
