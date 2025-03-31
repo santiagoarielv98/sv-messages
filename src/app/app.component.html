@@ -7,7 +7,7 @@
     }
 </header>
 
-@if(users$ | async; as users){
+@if((user$ | async) && users$ | async; as users){
     <form (ngSubmit)="createChat()">
         <input type="text" [(ngModel)]="chatName" name="chatName" required>
         <!-- seleccionar miembros -->

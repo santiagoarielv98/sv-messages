@@ -1,7 +1,7 @@
-import { FormsModule } from '@angular/forms';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { Chat, ChatService } from './services/chat.service';
 import { UserService } from './services/user.service';
@@ -18,15 +18,19 @@ export class AppComponent {
   chatName = '';
   selectedMembers: string[] = [];
   messageBody = '';
+  subcriptionCount = signal(0);
 
   authService = inject(AuthService);
   chatService = inject(ChatService);
   userService = inject(UserService);
 
-  user$ = this.authService.user$;
+  user$ = this.authService.user$.pipe(
+    tap((user) => !user && this.selectedChatSubject.next(null)),
+  );
   users$ = this.userService.users$;
 
   selectedChat$ = this.selectedChatSubject.asObservable();
+
   messages$ = this.selectedChat$.pipe(
     switchMap((chat) => (chat ? this.chatService.getMessages(chat) : of([]))),
   );

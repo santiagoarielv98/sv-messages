@@ -4,8 +4,13 @@ import {
   collection,
   collectionData,
   doc,
+  FieldValue,
   Firestore,
+  orderBy,
+  query,
+  serverTimestamp,
   setDoc,
+  where,
 } from '@angular/fire/firestore';
 import { from, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -19,6 +24,7 @@ export interface Chat {
 export interface Message {
   id?: string;
   body: string;
+  timestamp: FieldValue;
 }
 
 @Injectable({
@@ -37,6 +43,7 @@ export class ChatService {
 
     const message1: Omit<Message, 'id'> = {
       body: 'Hello World',
+      timestamp: serverTimestamp(),
     };
 
     setDoc(doc(this.firestore, 'chats', 'chat1'), chat1, {
@@ -66,18 +73,27 @@ export class ChatService {
   }
 
   getChats() {
-    return collectionData(collection(this.firestore, 'chats'), {
+    const user = this.authService.currentUser;
+    if (!user) {
+      return of([]);
+    }
+    const q = query(
+      collection(this.firestore, 'chats'),
+      where('members', 'array-contains', user.uid),
+    );
+    return collectionData(q, {
       idField: 'id',
     }) as Observable<Chat[]>;
   }
 
   getMessages(chat: Chat) {
-    return collectionData(
+    const q = query(
       collection(this.firestore, `chats/${chat.id}/messages`),
-      {
-        idField: 'id',
-      },
-    ) as Observable<Message[]>;
+      orderBy('timestamp', 'asc'),
+    );
+    return collectionData(q, {
+      idField: 'id',
+    }) as Observable<Message[]>;
   }
 
   sendMessage(chat: Chat, body: string) {
@@ -89,6 +105,7 @@ export class ChatService {
 
     const message: Omit<Message, 'id'> = {
       body,
+      timestamp: serverTimestamp(),
     };
 
     return from(
