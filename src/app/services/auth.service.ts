@@ -2,12 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   authState,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
   user,
   UserCredential,
 } from '@angular/fire/auth';
@@ -85,46 +82,11 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Observable<User> {
-    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      switchMap((credential) => this.handleUserCredential(credential)),
-      catchError((error) => {
-        console.error('Login error:', error);
-        return throwError(() => error);
-      }),
-    );
-  }
-
   loginWithGoogle(): Observable<User> {
     return from(signInWithPopup(this.auth, this.provider)).pipe(
       switchMap((credential) => this.handleUserCredential(credential)),
       catchError((error) => {
         console.error('Google login error:', error);
-        return throwError(() => error);
-      }),
-    );
-  }
-
-  register(
-    email: string,
-    password: string,
-    displayName: string,
-  ): Observable<User> {
-    return from(
-      createUserWithEmailAndPassword(this.auth, email, password),
-    ).pipe(
-      switchMap(async (credential) => {
-        if (credential.user) {
-          await updateProfile(credential.user, { displayName });
-          return credential;
-        }
-        throw new Error('User creation failed');
-      }),
-      switchMap((credential) =>
-        this.createUserInFirestore(credential, displayName),
-      ),
-      catchError((error) => {
-        console.error('Registration error:', error);
         return throwError(() => error);
       }),
     );
