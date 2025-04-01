@@ -1,1 +1,32 @@
-<p></p>
+<div>
+  <h1>SV Messages</h1>
+  
+  <div *ngIf="error$ | async as error" style="color: red; margin: 10px 0;">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading$ | async">
+    Loading...
+  </div>
+
+  <div *ngIf="(currentUser$ | async) as currentUser; else loginBlock">
+    <h2>User Information</h2>
+    <div>
+      <img *ngIf="currentUser.photoURL" [src]="currentUser.photoURL" alt="Profile picture" width="50" height="50">
+      <p><strong>Display Name:</strong> {{ currentUser.displayName }}</p>
+      <p><strong>User ID:</strong> {{ currentUser.id }}</p>
+      <p><strong>Status:</strong> {{ currentUser.online ? 'Online' : 'Offline' }}</p>
+      <p><strong>Last Login:</strong> {{ currentUser.lastLoginAt.toDate() | date:'medium' }}</p>
+    </div>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+  <ng-template #loginBlock>
+    <div>
+      <p>Please login to continue</p>
+      <button (click)="loginWithGoogle()">
+        Login with Google
+      </button>
+    </div>
+  </ng-template>
+</div>

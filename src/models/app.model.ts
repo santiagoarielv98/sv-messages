@@ -1,9 +1,11 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export interface User {
   id: string;
   displayName: string;
   photoURL: string;
   online: boolean;
-  lastLoginAt: Date;
+  lastLoginAt: Timestamp;
 }
 
 export interface Chat {

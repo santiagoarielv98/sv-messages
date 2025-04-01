@@ -17,6 +17,7 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  Timestamp,
   updateDoc,
 } from '@angular/fire/firestore';
 import {
@@ -172,7 +173,7 @@ export class AuthService {
         const newUser: User = {
           id: userId,
           ...userData,
-          lastLoginAt: new Date(),
+          lastLoginAt: Timestamp.now(),
         };
         this.currentUserSubject.next(newUser);
         return newUser;
@@ -202,7 +203,7 @@ export class AuthService {
                 id: userId,
                 ...userData,
                 online: true,
-                lastLoginAt: new Date(),
+                lastLoginAt: Timestamp.now(),
               };
               this.currentUserSubject.next(user);
               return user;
