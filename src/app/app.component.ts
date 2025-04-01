@@ -1,13 +1,9 @@
-import { Component, inject } from '@angular/core';
-import { LayoutComponent } from './layout/layout.component';
-import { AuthDialogService } from './services/auth-dialog.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  imports: [LayoutComponent],
-  template: `<app-layout />`,
+  imports: [],
+  templateUrl: './app.component.html',
   styles: [],
 })
-export class AppComponent {
-  private readonly authDialog = inject(AuthDialogService);
-}
+export class AppComponent {}

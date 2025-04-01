@@ -1,4 +1,6 @@
 export const environment = {
+  production: true,
+  useEmulators: false,
   firebase: {
     projectId: 'PROJECT_ID',
     appId: 'APP_ID',
@@ -6,6 +8,5 @@ export const environment = {
     apiKey: 'API_KEY',
     authDomain: 'AUTH_DOMAIN',
     messagingSenderId: 'SENDER_ID',
-    measurementId: 'MEASUREMENT_ID',
   },
 };

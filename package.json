@@ -1,11 +1,12 @@
 {
   "name": "sv-messages",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "firebase:emulator": "firebase emulators:start --only firestore,auth --export-on-exit=./emulators-export --import=./emulators-export",
     "test": "ng test",
     "lint": "ng lint"
   },
