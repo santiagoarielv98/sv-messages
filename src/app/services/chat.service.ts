@@ -38,7 +38,7 @@ import { UserService } from './user.service';
 
 interface TypingUser {
   userId: string;
-  timestamp: any;
+  timestamp: unknown;
 }
 
 @Injectable({
