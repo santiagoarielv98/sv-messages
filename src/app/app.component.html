@@ -1,32 +1,31 @@
+
 <div>
-  <h1>SV Messages</h1>
-  
-  <div *ngIf="error$ | async as error" style="color: red; margin: 10px 0;">
-    {{ error }}
-  </div>
+    <h2>Autenticación</h2>
 
-  <div *ngIf="loading$ | async">
-    Loading...
-  </div>
-
-  <div *ngIf="(currentUser$ | async) as currentUser; else loginBlock">
-    <h2>User Information</h2>
-    <div>
-      <img *ngIf="currentUser.photoURL" [src]="currentUser.photoURL" alt="Profile picture" width="50" height="50">
-      <p><strong>Display Name:</strong> {{ currentUser.displayName }}</p>
-      <p><strong>User ID:</strong> {{ currentUser.id }}</p>
-      <p><strong>Status:</strong> {{ currentUser.online ? 'Online' : 'Offline' }}</p>
-      <p><strong>Last Login:</strong> {{ currentUser.lastLoginAt.toDate() | date:'medium' }}</p>
+    <!-- Botón de login con Google, solo se muestra si no está autenticado -->
+    <div *ngIf="!currentUser()">
+      <button (click)="loginWithGoogle()">Iniciar sesión con Google</button>
+      <p *ngIf="errorMessage()">Error: {{ errorMessage() }}</p>
+      <p *ngIf="isLoading()">Cargando...</p>
     </div>
-    <button (click)="logout()">Logout</button>
-  </div>
 
-  <ng-template #loginBlock>
-    <div>
-      <p>Please login to continue</p>
-      <button (click)="loginWithGoogle()">
-        Login with Google
-      </button>
+    <!-- Información del usuario y botón de logout, solo se muestra si está autenticado -->
+    <div *ngIf="currentUser()">
+      <h3>Usuario autenticado</h3>
+      <p>ID: {{ currentUser()?.id }}</p>
+      <p>Nombre: {{ currentUser()?.displayName }}</p>
+      <p>
+        Foto:
+        <img
+          *ngIf="currentUser()?.photoURL"
+          [src]="currentUser()?.photoURL"
+          alt="Foto de perfil"
+          width="50"
+        />
+      </p>
+      <p>Estado: {{ currentUser()?.online ? 'En línea' : 'Desconectado' }}</p>
+      <p>Último acceso: {{ currentUser()?.lastLoginAt?.toDate() | date: 'medium' }}</p>
+
+      <button (click)="logout()">Cerrar sesión</button>
     </div>
-  </ng-template>
-</div>
+  </div>
