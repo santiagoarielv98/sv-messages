@@ -7,40 +7,42 @@ import {
   User,
   user,
 } from '@angular/fire/auth';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore';
-import { shareReplay } from 'rxjs';
-import { UserModel } from './user.service';
+import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private firestore = inject(Firestore);
-  private provider: GoogleAuthProvider = new GoogleAuthProvider();
+  user$: Observable<User | null>;
+
   private auth: Auth = inject(Auth);
+  private provider: GoogleAuthProvider = new GoogleAuthProvider();
 
-  user$ = user(this.auth).pipe(shareReplay(1));
-
-  async login() {
-    await signInWithPopup(this.auth, this.provider).then((credential) =>
-      this.createUser(credential.user),
-    );
+  constructor() {
+    this.user$ = user(this.auth).pipe(shareReplay(1));
   }
 
-  async logout() {
-    await signOut(this.auth);
+  async login(): Promise<User> {
+    try {
+      const credential = await signInWithPopup(this.auth, this.provider);
+      return credential.user;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
   }
-  get currentUser() {
+
+  async logout(): Promise<void> {
+    try {
+      await signOut(this.auth);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      throw error;
+    }
+  }
+
+  get currentUser(): User | null {
     return this.auth.currentUser;
-  }
-
-  private async createUser(user: User) {
-    const userData: UserModel = {
-      name: user.displayName || '',
-    };
-
-    await setDoc(doc(this.firestore, 'users', user.uid), userData, {
-      merge: true,
-    });
   }
 }
