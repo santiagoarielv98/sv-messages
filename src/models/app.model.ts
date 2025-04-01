@@ -11,6 +11,8 @@ export interface Chat {
   name: string;
   members: string[];
   lastMessage: Omit<Message, 'id'> | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Message {
@@ -18,24 +20,41 @@ export interface Message {
   senderId: string;
   content: string;
   timestamp: Date;
+  isRead?: boolean;
 }
 
-/* 
-estructura en firestore
-users
-  userId
-    displayName
-    photoURL
-    online
-    lastLoginAt
-chats
-  chatId
-    name
-    members
-    lastMessage
-    messages (subcollection)
-      messageId
-        senderId
-        content
-        timestamp
-*/
+export interface ReadReceipt {
+  userId: string;
+  timestamp: Date;
+}
+
+export interface ChatMember {
+  userId: string;
+  joinedAt: Date;
+  isAdmin?: boolean;
+}
+
+export interface Contact {
+  userId: string;
+  addedAt: Date;
+  active: boolean;
+}
+
+export interface TypingIndicator {
+  userId: string;
+  timestamp: Date;
+}
+
+export interface MessageAttachment {
+  url: string;
+  type: 'image' | 'file' | 'audio';
+  name: string;
+  size?: number;
+  thumbnailUrl?: string;
+}
+
+export interface UserStatus {
+  online: boolean;
+  lastSeen: Date;
+  isTyping?: boolean;
+}
